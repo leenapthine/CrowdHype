@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+
 # CrowdHype Project
 
 ## Database Setup
