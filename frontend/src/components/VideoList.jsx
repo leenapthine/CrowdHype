@@ -1,4 +1,3 @@
-// crowdhype-frontend/src/components/VideoList.jsx
 import { createSignal, createEffect } from "solid-js";
 import VideoItem from "./VideoItem";
 
@@ -15,7 +14,7 @@ function VideoList() {
   });
 
   return (
-    <div>
+    <div >
       {videos().map((video) => (
         <VideoItem video={video} />
       ))}
