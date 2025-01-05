@@ -30,6 +30,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -41,8 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crowdapp',
+    'corsheaders',
     'rest_framework',
-    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -57,12 +63,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'crowdhype.urls'
-
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5173",
-    "http://localhost:5173",
-]
-
 
 TEMPLATES = [
     {
