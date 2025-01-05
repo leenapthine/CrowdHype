@@ -49,54 +49,59 @@ function UploadVideo() {
     return (
         <form 
             onSubmit={handleUpload}
-            class="flex flex-col space-y-4 p-4 mb-4 bg-gray-800 rounded-md shadow-md max-w-md"
+            class="flex flex-col space-y-4 p-4 mb-4 bg-neutral-100 rounded-xl shadow-md"
             >
             <div class="flex flex-col">
-                <label class="mb-1 text-sm text-gray-300 font-semibold">Title</label>
+                <label class="mb-1 text-sm text-neutral-700 font-semibold">Title</label>
                 <input
                 type="text"
                 value={title()}
                 onInput={(e) => setTitle(e.currentTarget.value)}
                 required
-                class="p-2 rounded-sm text-gray-200 bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="p-2 rounded-md text-neutral-800 bg-white border border-neutral-300
+                        focus:outline-none focus:ring-2 focus:ring-neutral-500"
                 placeholder="Enter a title..."
                 />
             </div>
         
             <div class="flex flex-col">
-                <label class="mb-1 text-sm text-gray-300 font-semibold">Description</label>
+                <label class="mb-1 text-sm text-neutral-700 font-semibold">Description</label>
                 <textarea
                 value={description()}
                 onInput={(e) => setDescription(e.currentTarget.value)}
-                class="p-2 rounded-sm text-gray-200 bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="p-2 rounded-md text-neutral-800 bg-white border border-neutral-300
+                        focus:outline-none focus:ring-2 focus:ring-neutral-500"
                 placeholder="Enter a description..."
                 />
             </div>
         
             <div class="flex flex-col">
-                <label class="mb-1 text-sm text-gray-300 font-semibold">Video File</label>
+                <label class="mb-1 text-sm text-neutral-700 font-semibold">Video File</label>
                 <input
                 type="file"
                 onChange={(e) => setFile(e.currentTarget.files[0])}
                 required
-                class="text-sm text-gray-200 file:mr-4 file:py-2 file:px-4
-                        file:rounded file:border-0
+                class="text-sm text-neutral-800 file:mr-4 file:py-2 file:px-4
+                        file:rounded-md file:border-0
                         file:text-sm file:font-semibold
-                        file:bg-blue-600 file:text-white
-                        hover:file:bg-blue-700
-                        focus:outline-none"
+                        file:bg-neutral-500 file:text-white
+                        hover:file:bg-neutral-600
+                        focus:outline-none
+                        border border-neutral-300 rounded-md p-1
+                        bg-white"
                 />
             </div>
         
             <button
                 type="submit"
-                class="py-2 px-4 bg-blue-600 text-white font-semibold rounded-md
-                    hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="py-2 px-4 bg-neutral-500 text-white font-semibold rounded-md
+                    hover:bg-neutral-600 focus:outline-none focus:ring-2 focus:ring-neutral-500
+                    transition-colors"
             >
                 Upload Video
             </button>
         </form>
-      );
+    );
 }
 
 export default UploadVideo;
