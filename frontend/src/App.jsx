@@ -9,10 +9,17 @@ function App() {
   return (
     <div class="min-h-screen bg-gradient-to-tr from-neutral-50 to-neutral-100 text-neutral-800 flex flex-col">
       {/* Header */}
-      <div class="bg-neutral-100 shadow-md p-4">
-        <header class="p-6 shadow-md bg-white text-center">
-            <h1 class="text-3xl font-bold ">.crowd</h1>
+      <div class="bg-neutral-100 shadow-md p-4 sticky top-0 z-10">
+        <header class="p-2 shadow-md bg-white flex items-center justify-center space-x-3">
+          <img 
+            src="/rec-button.png" 
+            alt="rec" 
+            class="h-12 w-auto"
+          />
+          <div class="leading-none text-center">
+            <h1 class="text-3xl font-bold">.crowd</h1>
             <h1 class="text-4xl font-bold">HYPE</h1>
+          </div>
         </header>
       </div>
 
@@ -21,10 +28,9 @@ function App() {
         {/* Left Aside (extra content or placeholder) */}
         <aside
           class="w-full md:w-64 p-6 border-b border-neutral-300 md:border-b-0 md:border-r md:border-neutral-300
-                 bg-white shadow-xl rounded-b-2xl md:rounded-r-none md:rounded-b-none
-                 flex flex-col justify-start"
+                 bg-white shadow-xl rounded-b-2xl md:rounded-r-none md:rounded-b-none md:overflow-y-auto md:h-screen"
         >
-          <h2 class="text-lg font-semibold mb-4">Left Sidebar</h2>
+          <h2 class="text-lg font-semibold mb-4">User Profile</h2>
           <p class="text-sm text-neutral-600">
             {/* Put any content here: trending videos, user stats, etc. */}
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
@@ -36,7 +42,7 @@ function App() {
         {/* Feed Section (center) */}
         <section
           class="flex-1 p-6 max-w-5xl mx-auto transform
-                 md:rotate-x-1 md:-rotate-y-1 transition-transform ease-in-out"
+                 md:rotate-x-1 md:-rotate-y-1 transition-transform ease-in-out overflow-y-auto h-screen"
         >
           <div class="bg-white shadow-xl rounded-2xl p-6">
             {/* <h2 class="text-xl font-semibold mb-4">Your Stream</h2> */}
@@ -49,7 +55,7 @@ function App() {
           class="w-full md:w-80 p-6 border-t border-neutral-300
                  md:border-t-0 md:border-l md:border-neutral-300 bg-white shadow-xl
                  rounded-t-2xl md:rounded-l-2xl md:rounded-t-none
-                 flex flex-col justify-start"
+                 flex flex-col justify-start overflow-y-auto h-screen"
         >
           <h2 class="text-lg font-semibold mb-4">Upload a Video</h2>
           <UploadVideo />
