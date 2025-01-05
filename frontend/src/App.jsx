@@ -10,9 +10,16 @@ function App() {
     <div class="min-h-screen bg-gradient-to-tr from-neutral-50 to-neutral-100 text-neutral-800 flex flex-col">
       {/* Header */}
       <div class="bg-neutral-100 shadow-md p-4 sticky top-0 z-10">
-        <header class="p-2 shadow-md bg-white text-center">
-            <h1 class="text-3xl font-bold ">.crowd</h1>
+        <header class="p-2 shadow-md bg-white flex items-center justify-center space-x-3">
+          <img 
+            src="/rec-button.png" 
+            alt="rec" 
+            class="h-12 w-auto"
+          />
+          <div class="leading-none text-center">
+            <h1 class="text-3xl font-bold">.crowd</h1>
             <h1 class="text-4xl font-bold">HYPE</h1>
+          </div>
         </header>
       </div>
 
