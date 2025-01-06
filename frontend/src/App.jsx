@@ -25,7 +25,8 @@ function App() {
             <h1 class="text-3xl font-bold">.crowd</h1>
             <h1 class="text-4xl font-bold">HYPE</h1>
           </div>
-          <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">            <img 
+          <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
+            <img 
               src="/rec-button.png" 
               alt="rec" 
               class="h-14 w-auto mr-0 cursor-pointer"
@@ -39,8 +40,9 @@ function App() {
       <main class="flex flex-1 flex-col md:flex-row perspective-1000">
         {/* Left Aside (extra content or placeholder) */}
         <aside
-          class="w-full md:w-80 p-6 border-b border-neutral-300 md:border-b-0 md:border-r md:border-neutral-300
-                 bg-white shadow-xl rounded-b-2xl md:rounded-r-none md:rounded-b-none md:overflow-y-auto md:h-screen"
+          class="w-full md:w-80 md:flex-shrink md:min-w-[150px] p-6 border-b border-neutral-300 
+                md:border-b-0 md:border-r md:border-neutral-300 bg-white shadow-xl rounded-b-2xl 
+                md:rounded-r-none md:rounded-b-none md:overflow-y-auto md:h-screen"
         >
           <h2 class="text-lg font-semibold mb-4">User Profile</h2>
           <p class="text-sm text-neutral-600">
@@ -54,7 +56,8 @@ function App() {
         {/* Feed Section (center) */}
         <section
           class="flex-1 p-6 max-w-5xl mx-auto transform
-                 md:rotate-x-1 md:-rotate-y-1 transition-transform ease-in-out overflow-y-auto h-screen"
+                 md:rotate-x-1 md:-rotate-y-1 transition-transform ease-in-out 
+                 overflow-y-auto h-screen min-w-[375px]"
         >
           <div class="bg-white shadow-xl rounded-2xl p-6">
             {/* <h2 class="text-xl font-semibold mb-4">Your Stream</h2> */}
@@ -67,7 +70,7 @@ function App() {
           class="w-full md:w-80 p-6 border-t border-neutral-300
                  md:border-t-0 md:border-l md:border-neutral-300 bg-white shadow-xl
                  rounded-t-2xl md:rounded-l-2xl md:rounded-t-none
-                 flex flex-col justify-start overflow-y-auto h-screen"
+                 flex flex-col justify-start overflow-y-auto h-screen md:min-w-[300px]"
         >
           <h2 class="text-lg font-semibold mb-4">Upload a Video</h2>
           <UploadVideo />
