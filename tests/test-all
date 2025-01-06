@@ -1,0 +1,102 @@
+#!/bin/bash
+# shellcheck disable=
+#
+# Run all available test suites from a single script.
+
+# --------------------------------------------------------------------------
+#                                                            configuration
+# --------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------
+#                                                            functions
+# --------------------------------------------------------------------------
+
+fail_to()
+{
+  2>&1 echo "Unable to $*"
+  exit 1
+}
+
+warn_couldnt()
+{
+  2>&1 echo "Unable to $*"
+}
+
+# --------------------------------------------------------------------------
+#                                                         argument parsing
+# --------------------------------------------------------------------------
+
+usage()
+{
+  cat <<EOF
+Usage: $(basename "$0") [--no-linting] [--no-unit] [--no-ui]
+       $(basename "$0") -h|--help
+
+Runs available testing for this application.
+
+Currently limited to inspection, unit and user interface testing.
+EOF
+}
+
+# defaults
+linting=1
+unittests=1
+uitests=1
+
+while [ -n "$1" ]
+do
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --no-linting)
+      linting=0
+      ;;
+    --no-unit)
+      unittests=0
+      ;;
+    --no-ui)
+      uitests=0
+      ;;
+    *)
+      2>&1 echo "Unrecognized: $1"
+      usage
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+# --------------------------------------------------------------------------
+#                                                                execution
+# --------------------------------------------------------------------------
+
+export PYTHONPATH=.:$PYTHONPATH
+
+# Check if shellcheck is installed
+if ! command -v shellcheck &> /dev/null; then
+  echo "shellcheck is not installed. Installing..."
+  sudo apt-get update && sudo apt-get install -y shellcheck
+else
+  echo "shellcheck is installed"
+fi
+
+# linting
+if (( linting ))
+then
+  tests/linting/intest yamllint shellcheck pylint || exit 1
+fi
+
+# unittests
+if (( unittests ))
+then
+  echo "Unit testing not yet defined"
+fi
+
+# uitests
+if (( uitests ))
+then
+  echo "UI testing not yet defined"
+fi
