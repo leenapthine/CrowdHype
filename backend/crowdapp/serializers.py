@@ -1,3 +1,4 @@
+# pylint:
 from rest_framework import serializers
 from .models import Video, Artist, Festival, Like, Comment
 

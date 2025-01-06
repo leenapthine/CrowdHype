@@ -1,4 +1,4 @@
-# from django.shortcuts import render
+# pylint:
 from rest_framework import viewsets
 from .models import Video, Artist, Festival, Like, Comment
 from .serializers import VideoSerializer, ArtistSerializer, FestivalSerializer, LikeSerializer, CommentSerializer
