@@ -1,10 +1,12 @@
 # CrowdHype Project
 
-## Database Setup
+## Development and testing
+
+### Database Setup
 
 First, install PostgreSQL on your system. You can download it from the official website or use a package manager.
 
-### macOS
+#### macOS
 
 Using Homebrew:
 
@@ -19,10 +21,12 @@ this creates a new database and user
 psql -U lee -d crowdhype_db -W
 ```
 
-Some stuff for LEe to remember:
+Some stuff for Lee to remember:
 
 -U lee logs in with the lee role.
+
 -d crowdhype_db chooses the database you created.
+
 -W forces a password prompt.
 
 password: supersecretpassword
@@ -36,22 +40,33 @@ ALTER ROLE lee SET timezone TO 'UTC';
 GRANT ALL PRIVILEGES ON DATABASE crowdhype_db TO lee;
 ```
 
-#### Setup environment
+### Setup environment
 
-Begin by creating a virtual environment in your project root folder:
+Run the provided makefile from your root directory to set up both your frontend and backend environment:
 
 ```sh
-python -m venv venv
+make dev-setup
 ```
 
-Activate your new virtual environment:
+While working make sure you are inside your virtual environment:
 
 ```sh
 . bin/venv/activate
 ```
 
-Then run the provided makefile from your root directory to set up both your frontend and backend environment:
+### Retrieving submodule(s)
+
+This submodule needs to be called from the ARCsoft gitlab repository:
+
+- the `intest` module, which handles inspection testing (linting)
+
+The intest module needs to be available for testing, but not for execution and
+should not be included in deployments.
+
+This should pull the submodule down:
 
 ```sh
-make install
+git submodule init
+git submodule sync
+git submodule update --init --recursive
 ```
