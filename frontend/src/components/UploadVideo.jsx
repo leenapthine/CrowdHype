@@ -1,10 +1,18 @@
-import { createSignal } from "solid-js";
+import { createSignal, createEffect } from "solid-js";
 
-function UploadVideo() {
+function UploadVideo( { preloadedVideo}) {
     // Signals to hold upload form data
     const [title, setTitle] = createSignal("");
     const [description, setDescription] = createSignal("");
-    const [file, setFile] = createSignal(null);
+    const [file, setFile] = createSignal(preloadedVideo || null);
+
+    // If a preloaded video file is provided, set it
+    createEffect(() => {
+        if (preloadedVideo) {
+            console.log("Preloaded Video Detected:", preloadedVideo);
+            setFile(preloadedVideo);
+        }
+    });
     
     // handler for form submission
     const handleUpload = async (e) => {
@@ -41,6 +49,7 @@ function UploadVideo() {
             setTitle("");
             setDescription("");
             setFile(null);
+            fileInputRef.value = "";
         } catch (error) {
             console.error("Error uploading video: ", error);
         }
@@ -74,24 +83,39 @@ function UploadVideo() {
                 placeholder="Enter a description..."
                 />
             </div>
-        
-            <div class="flex flex-col">
-                <label class="mb-1 text-sm text-neutral-700 font-semibold">Video File</label>
-                <input
-                type="file"
-                onChange={(e) => setFile(e.currentTarget.files[0])}
-                required
-                class="text-sm text-neutral-800 file:mr-4 file:py-2 file:px-4
-                        file:rounded-md file:border-0
-                        file:text-sm file:font-semibold
-                        file:bg-neutral-500 file:text-white
-                        hover:file:bg-neutral-600
-                        focus:outline-none
-                        border border-neutral-300 rounded-md p-1
-                        bg-white"
-                />
-            </div>
-        
+
+            {/* Show File Input Only If No Preloaded Video */}
+            {!preloadedVideo && (
+                <div class="flex flex-col">
+                    <label class="mb-1 text-sm text-neutral-700 font-semibold">Video File</label>
+                    <input
+                        type="file"
+                        onChange={(e) => setFile(e.currentTarget.files[0])}
+                        required
+                        class="text-sm text-neutral-800 file:mr-4 file:py-2 file:px-4
+                                file:rounded-md file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-neutral-500 file:text-white
+                                hover:file:bg-neutral-600
+                                focus:outline-none
+                                border border-neutral-300 rounded-md p-1
+                                bg-white"
+                    />
+                </div>
+            )}
+
+            {/* Show a small preview if preloaded video exists */}
+            {preloadedVideo && (
+                <div class="flex flex-col items-center mb-4">
+                    <p class="text-sm text-neutral-700 mb-2">Preloaded Video:</p>
+                    <video 
+                        controls 
+                        class="rounded-md shadow-md max-w-full"
+                        src={URL.createObjectURL(preloadedVideo)}
+                    ></video>
+                </div>
+            )}
+            
             <button
                 type="submit"
                 class="py-2 px-4 bg-neutral-500 text-white font-semibold rounded-md
