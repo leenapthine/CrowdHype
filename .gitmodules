@@ -1,0 +1,3 @@
+[submodule "tests/linting"]
+	path = tests/linting
+	url = https://gitlab.com/dlek/intest.git

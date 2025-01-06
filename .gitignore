@@ -11,6 +11,15 @@ db.sqlite3
 # Virtual environment
 venv/
 
+# Testing and coverage
+htmlcov/
+.coverage
+.coverage.*
+.cache
+coverage.xml
+.lintcache/
+**/tests/test_files/**
+
 # macOS
 .DS_Store
 

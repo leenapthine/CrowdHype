@@ -1,3 +1,4 @@
+# pylint:
 """
 Django settings for crowdhype project.
 

@@ -1,3 +1,4 @@
+# pylint:
 """
 URL configuration for crowdhype project.
 
