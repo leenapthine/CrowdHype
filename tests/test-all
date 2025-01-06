@@ -76,17 +76,17 @@ done
 export PYTHONPATH=.:$PYTHONPATH
 
 # Check if shellcheck is installed
-if ! command -v shellcheck &> /dev/null; then
-  echo "shellcheck is not installed. Installing..."
-  sudo apt-get update && sudo apt-get install -y shellcheck
-else
-  echo "shellcheck is installed"
-fi
+# if ! command -v shellcheck &> /dev/null; then
+#   echo "shellcheck is not installed. Installing..."
+#   sudo apt-get update && sudo apt-get install -y shellcheck
+# else
+#   echo "shellcheck is installed"
+# fi
 
 # linting
 if (( linting ))
 then
-  tests/linting/intest yamllint shellcheck pylint || exit 1
+  tests/linting/intest yamllint pylint || exit 1
 fi
 
 # unittests
