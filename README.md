@@ -56,12 +56,15 @@ While working make sure you are inside your virtual environment:
 
 ### Retrieving submodule(s)
 
-This submodule needs to be called from the ARCsoft gitlab repository:
+This project includes a submodule for inspection testing (linting) sourced from https://gitlab.com/dlek/intest.git.
 
-- the `intest` module, which handles inspection testing (linting)
+The intest module handles inspection testing and is required for development and testing purposes only. It should not be included in deployments and is not required for runtime execution.
 
-The intest module needs to be available for testing, but not for execution and
-should not be included in deployments.
+if you're cloning the repo for the first time:
+
+```sh
+git clone --recursive https://github.com/your-org/your-repo.git
+```
 
 This should pull the submodule down:
 
