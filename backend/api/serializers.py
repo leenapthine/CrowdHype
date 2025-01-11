@@ -1,4 +1,7 @@
-# pylint:
+# pylint: disable=missing-class-docstring,too-few-public-methods
+"""
+Serializers for the API
+"""
 from rest_framework import serializers
 from .models import Video, Artist, Festival, Like, Comment
 

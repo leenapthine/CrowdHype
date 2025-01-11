@@ -1,7 +1,16 @@
-# pylint:
+# pylint: disable=missing-class-docstring,too-many-ancestors,no-member
+"""
+This file contains the views for the API.
+"""
 from rest_framework import viewsets
 from .models import Video, Artist, Festival, Like, Comment
-from .serializers import VideoSerializer, ArtistSerializer, FestivalSerializer, LikeSerializer, CommentSerializer
+from .serializers import (
+    VideoSerializer,
+    ArtistSerializer,
+    FestivalSerializer,
+    LikeSerializer,
+    CommentSerializer,
+)
 
 class VideoViewSet(viewsets.ModelViewSet):
     queryset = Video.objects.all()
