@@ -1,0 +1,22 @@
+[run]
+source =
+    api
+    crowdhype
+omit =
+    */tests/*
+    */__init__.py
+    */migrations/*
+    */__pycache__/*
+    manage.py
+    crowdhype/asgi.py
+    crowdhype/wsgi.py
+    api/urls.py
+    crowdhype/urls.py
+
+[report]
+show_missing = True
+skip_covered = True
+precision = 2
+
+[html]
+directory = htmlcov
