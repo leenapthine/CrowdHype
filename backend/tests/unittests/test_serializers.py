@@ -1,12 +1,15 @@
 # pylint:
-from tests.unittests.base_test import TestCaseBase
+"""
+This is the test module for the serializers in the API.
+"""
+from io import BytesIO
+from datetime import date
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.exceptions import ValidationError
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
-from io import BytesIO
-from datetime import date
-from django.core.files.uploadedfile import SimpleUploadedFile
+from tests.unittests.base_test import TestCaseBase
 from api.models import Video, Artist, Festival, Like, Comment
 from api.serializers import (
     VideoSerializer,
@@ -17,7 +20,9 @@ from api.serializers import (
 )
 
 
+# pylint: disable=no-member
 class SerializerTestCase(TestCaseBase):
+    """Test case for the serializers"""
     def setUp(self):
         super().setUp()
         # Create a sample user

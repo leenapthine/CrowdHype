@@ -1,12 +1,17 @@
 # pylint:
-from tests.unittests.base_test import TestCaseBase
-from django.contrib.auth.models import User
-from api.models import Video, Artist, Festival, Like, Comment
+"""
+This module contains the tests for the api models.
+"""
 from datetime import date, datetime
+from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
+from api.models import Video, Artist, Festival, Like, Comment
+from tests.unittests.base_test import TestCaseBase
 
 
+# pylint: disable=no-member
 class TestModels(TestCaseBase):
+    """Test case for the models"""
     def setUp(self):
         super().setUp()
         # Create a sample user
