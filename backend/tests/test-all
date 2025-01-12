@@ -92,7 +92,13 @@ fi
 # unittests
 if (( unittests ))
 then
-  echo "Unit testing not yet defined"
+  echo "Running unit tests with coverage..."
+  # Run unittests and collect coverage data
+  coverage run --source=. -m unittest discover -s tests/unittests -p "test_*.py" || fail_to "run unit tests"
+  
+  # Generate terminal coverage report
+  echo "Generating coverage report..."
+  coverage report -m || warn_couldnt "generate coverage report"
 fi
 
 # uitests
