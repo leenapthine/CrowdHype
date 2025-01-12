@@ -94,7 +94,6 @@ if (( unittests ))
 then
   echo "Running unit tests with coverage..."
   coverage run --source='.' manage.py test || fail_to "run unit tests"
-  # coverage run --source='.' -m unittest discover -s tests/unittests -p "test_*.py" || fail_to "run unit tests"
   
   echo "Generating coverage report..."
   coverage report -m || warn_couldnt "generate coverage report"
