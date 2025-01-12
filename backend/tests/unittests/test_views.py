@@ -69,6 +69,7 @@ class TestViews(TestCaseBase):
         video_data = {
             "title": "New Video",
             "description": "New Description",
+            "uploader": self.user.id,
             "video_file": SimpleUploadedFile("new_test.mp4", b"file_content", content_type="video/mp4"),
         }
         response = self.client.post("/api/videos/", video_data, format="multipart")
