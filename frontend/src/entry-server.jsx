@@ -4,7 +4,7 @@ import { createHandler, StartServer } from "@solidjs/start/server";
 export default createHandler(() => (
     <StartServer
         document={({ assets, children, scripts }) => (
-            <html lang="e"n>
+            <html lang="en">
                 <head>
                     <meta charSet="UTF-8" />
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
