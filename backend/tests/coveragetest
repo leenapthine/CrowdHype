@@ -8,6 +8,6 @@ fail_to() {
 }
 
 coverage erase
-coverage run --source='.' backend/manage.py test || fail_to "run unit tests"
+coverage run --source='.' backend/manage.py test --settings=crowdhype.settings || fail_to "run unit tests"
 coverage report
 echo "Code coverage: $(coverage report --format=total)%"

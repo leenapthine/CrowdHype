@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-# import os
+import os
 # import sys
 from pathlib import Path
 
@@ -99,6 +99,14 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+if os.getenv('CI'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
+    }
 
 # Password validation / login/logout / dev email backend
 AUTH_USER_MODEL = 'api.CustomUser'
