@@ -4,10 +4,9 @@ on:
   push:
     branches:
       - main
-      - "**" # Run on all branches
   pull_request:
     branches:
-      - "**"
+      - main
 
 jobs:
   setup:
@@ -16,12 +15,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          submodules: true # Initialize and fetch submodules
+          submodules: true
 
       - name: Set up Python environment
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9" # Adjust Python version as needed
+          python-version: "3.9"
 
       - name: Install dependencies
         run: |
@@ -29,7 +28,7 @@ jobs:
           . venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip install -r tests/requirements.txt
+          pip install -r backend/tests/requirements.txt
 
   linting:
     needs: setup
@@ -42,8 +41,9 @@ jobs:
 
       - name: Run linting
         run: |
+          python -m venv venv
           . venv/bin/activate
-          tests/linting/intest yamllint pylint unixmode
+          backend/tests/linting/intest yamllint pylint unixmode
 
   unit-test:
     needs: setup
@@ -65,9 +65,12 @@ jobs:
           . venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip install -r tests/requirements.txt
+          pip install -r backend/tests/requirements.txt
+
+      - name: Debug environment
+        run: echo "CI=$CI"
 
       - name: Run unit tests with coverage
         run: |
           . venv/bin/activate
-          ./tests/coveragetest
+          ./backend/tests/coveragetest

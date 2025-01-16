@@ -3,7 +3,8 @@
 Models for the api app
 """
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 class Video(models.Model):
     """
@@ -11,7 +12,9 @@ class Video(models.Model):
     """
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    uploader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='videos', default=1)
+    uploader = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='videos', default=1
+    )
     video_file = models.FileField(upload_to='videos/')
     upload_date = models.DateTimeField(auto_now_add=True)
 
@@ -48,7 +51,7 @@ class Like(models.Model):
     """
     Like model
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='likes')
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -59,11 +62,20 @@ class Comment(models.Model):
     """
     Comment model
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username} commented on {self.video.title}"
-# pylint: enable=no-member
+
+class CustomUser(AbstractUser):
+    """
+    Custom user model
+    """
+    ROLE_CHOICES = [
+        ('member', 'Member'),
+        ('promoter', 'Promoter'),
+    ]
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='member')

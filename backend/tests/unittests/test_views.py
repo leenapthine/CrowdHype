@@ -1,7 +1,6 @@
 from tests.unittests.base_test import TestCaseBase
 from rest_framework import status
-from django.contrib.auth.models import User
-from api.models import Video, Artist, Festival, Like, Comment
+from api.models import Video, Artist, Festival, Like, Comment, CustomUser
 from django.core.files.uploadedfile import SimpleUploadedFile
 from datetime import date
 
@@ -10,7 +9,7 @@ class TestViews(TestCaseBase):
         """Setup common data for tests"""
         super().setUp()
         # Create a test user
-        self.user = User.objects.create_user(username="testuser", password="password")
+        self.user = CustomUser.objects.create_user(username="testuser", password="password")
         self.client.login(username="testuser", password="password")
 
         Video.objects.all().delete()  # Ensure no leftover videos
