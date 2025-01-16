@@ -12,7 +12,9 @@ class Video(models.Model):
     """
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    uploader = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='videos', default=1)
+    uploader = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='videos', default=1
+    )
     video_file = models.FileField(upload_to='videos/')
     upload_date = models.DateTimeField(auto_now_add=True)
 

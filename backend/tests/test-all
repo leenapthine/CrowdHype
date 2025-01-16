@@ -88,7 +88,7 @@ if (( linting ))
 then
   tests/linting/intest yamllint pylint || exit 1
 fi
-
+\
 # unittests
 if (( unittests ))
 then
