@@ -4,10 +4,9 @@ on:
   push:
     branches:
       - main
-      - "**" # Run on all branches
   pull_request:
     branches:
-      - "**"
+      - main
 
 jobs:
   setup:
@@ -72,7 +71,6 @@ jobs:
         run: echo "CI=$CI"
 
       - name: Run unit tests with coverage
-        env:
         run: |
           . venv/bin/activate
           ./backend/tests/coveragetest
