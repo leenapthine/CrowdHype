@@ -43,7 +43,7 @@ jobs:
       - name: Run linting
         run: |
           . venv/bin/activate
-          tests/linting/intest yamllint pylint unixmode
+          badkend/tests/linting/intest yamllint pylint unixmode
 
   unit-test:
     needs: setup
@@ -65,9 +65,9 @@ jobs:
           . venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip install -r tests/requirements.txt
+          pip install -r backend/tests/requirements.txt
 
       - name: Run unit tests with coverage
         run: |
           . venv/bin/activate
-          ./tests/coveragetest
+          ./backend/tests/coveragetest
