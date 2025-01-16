@@ -16,12 +16,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          submodules: true # Initialize and fetch submodules
+          submodules: true
 
       - name: Set up Python environment
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9" # Adjust Python version as needed
+          python-version: "3.9"
 
       - name: Install dependencies
         run: |
@@ -49,6 +49,20 @@ jobs:
   unit-test:
     needs: setup
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -69,6 +83,8 @@ jobs:
           pip install -r backend/tests/requirements.txt
 
       - name: Run unit tests with coverage
+        env:
+          DATABASE_URL: "postgres://postgres:postgres@127.0.0.1:5432/test_db"
         run: |
           . venv/bin/activate
           ./backend/tests/coveragetest
