@@ -1,7 +1,13 @@
 #!/bin/sh
 # Source: https://adamj.eu/tech/2019/04/30/getting-a-django-application-to-100-percent-coverage/
 set -e  # Configure shell so that if one command fails, it exits
+
+fail_to() {
+    echo "Error: $1"
+    exit 1
+}
+
 coverage erase
-coverage run --source='.' manage.py test || fail_to "run unit tests"
+coverage run --source='.' backend/manage.py test || fail_to "run unit tests"
 coverage report
 echo "Code coverage: $(coverage report --format=total)%"
