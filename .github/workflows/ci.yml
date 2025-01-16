@@ -44,7 +44,7 @@ jobs:
         run: |
           python -m venv venv
           . venv/bin/activate
-          badkend/tests/linting/intest yamllint pylint unixmode
+          backend/tests/linting/intest yamllint pylint unixmode
 
   unit-test:
     needs: setup
