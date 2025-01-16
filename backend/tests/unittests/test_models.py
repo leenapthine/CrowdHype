@@ -3,9 +3,8 @@
 This module contains the tests for the api models.
 """
 from datetime import date, datetime
-from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-from api.models import Video, Artist, Festival, Like, Comment
+from api.models import Video, Artist, Festival, Like, Comment, CustomUser
 from tests.unittests.base_test import TestCaseBase
 
 
@@ -15,7 +14,7 @@ class TestModels(TestCaseBase):
     def setUp(self):
         super().setUp()
         # Create a sample user
-        self.user = User.objects.create_user(username='testuser', password='password')
+        self.user = CustomUser.objects.create_user(username='testuser', password='password')
         # Create a sample video
         self.video = Video.objects.create(
             title='Test Video',

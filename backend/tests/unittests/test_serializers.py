@@ -4,13 +4,12 @@ This is the test module for the serializers in the API.
 """
 from io import BytesIO
 from datetime import date
-from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.exceptions import ValidationError
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from tests.unittests.base_test import TestCaseBase
-from api.models import Video, Artist, Festival, Like, Comment
+from api.models import Video, Artist, Festival, Like, Comment, CustomUser
 from api.serializers import (
     VideoSerializer,
     ArtistSerializer,
@@ -26,7 +25,7 @@ class SerializerTestCase(TestCaseBase):
     def setUp(self):
         super().setUp()
         # Create a sample user
-        self.user = User.objects.create_user(username="testuser", password="password")
+        self.user = CustomUser.objects.create_user(username="testuser", password="password")
 
         # Create a sample video
         self.video = Video.objects.create(
