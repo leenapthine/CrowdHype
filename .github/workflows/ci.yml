@@ -16,38 +16,31 @@ jobs:
         image: postgres:latest
         env:
           POSTGRES_USER: lee
-          POSTGRES_PASSWORD: supersecretpassword
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: crowdhype_db
         ports:
           - 5432:5432
-        options: >
-          --health-cmd="pg_isready -U $POSTGRES_USER -d $POSTGRES_DB" 
-          --health-interval=10s 
-          --health-timeout=5s 
-          --health-retries=5
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-      - name: Configure .pgpass for PostgreSQL
+      - name: Configure .pgpass
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
-          echo "localhost:5432:crowdhype_db:lee:supersecretpassword" > ~/.pgpass
+          echo "localhost:5432:crowdhype_db:lee:${{ secrets.POSTGRES_PASSWORD }}" > ~/.pgpass
           chmod 600 ~/.pgpass
-
       - name: Wait for PostgreSQL
         run: |
-          until pg_isready -h localhost -p 5432 -U lee -d crowdhype_db; do
-            echo "Waiting for PostgreSQL to be ready...";
+          until pg_isready -h localhost -p 5432; do
+            echo "Waiting for PostgreSQL...";
             sleep 1;
           done
-
       - name: Test Database Connection
         env:
-          PGPASSWORD: supersecretpassword
+          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           psql -U lee -d crowdhype_db -h localhost -c '\l'
       - name: Install Dependencies
@@ -57,6 +50,8 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
       - name: Run Migrations
+        env:
+          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           . venv/bin/activate
           python backend/manage.py migrate
@@ -104,6 +99,8 @@ jobs:
         run: echo "CI=$CI"
 
       - name: Run unit tests with coverage
+        env:
+          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           . venv/bin/activate
           ./backend/tests/coveragetest
