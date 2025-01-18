@@ -55,8 +55,6 @@ jobs:
         run: |
           . venv/bin/activate
           python backend/manage.py migrate
-        env:
-          CI: true
 
   linting:
     needs: setup
