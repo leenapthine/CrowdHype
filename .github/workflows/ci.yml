@@ -103,25 +103,25 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
+      - name: Configure .pgpass
+        run: |
+          echo "localhost:5432:crowdhype_db:lee:supersecretpassword" > ~/.pgpass
+          chmod 600 ~/.pgpass
       - name: Wait for PostgreSQL
         run: |
           until pg_isready -h localhost -p 5432; do
             echo "Waiting for PostgreSQL...";
             sleep 1;
           done
+      - name: Test Database Connection
+        run: |
+          psql -U lee -d crowdhype_db -h localhost -c '\l'
       - name: Install Dependencies
         run: |
           python -m venv venv
           . venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Test Database Connection
-        run: |
-          psql -U lee -d crowdhype_db -h localhost -c '\l'
-        env:
-          POSTGRES_USER: lee
-          POSTGRES_DB: crowdhype_db
-          POSTGRES_PASSWORD: supersecretpassword
       - name: Run Migrations
         run: |
           . venv/bin/activate
