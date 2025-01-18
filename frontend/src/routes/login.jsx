@@ -32,7 +32,7 @@ function Login() {
       localStorage.setItem("role", role());
 
       // Navigate to the homepage after login
-      navigate("/");
+      navigate("/home");
     } catch (err) {
       setError(err.message);
     }

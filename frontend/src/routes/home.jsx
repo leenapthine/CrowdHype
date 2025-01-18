@@ -1,6 +1,5 @@
 import { createSignal } from "solid-js";
 import CameraPopup from "~/components/CameraPopup";
-import ProtectedRoute from "~/components/ProtectedRoute";
 import UploadVideo from "~/components/UploadVideo";
 import VideoList from "~/components/VideoList";
 import "~/index.css";
@@ -18,7 +17,6 @@ export default function Home() {
   };
 
   return (
-      <ProtectedRoute>
         <div class="min-h-screen bg-gradient-to-tr from-neutral-50 to-neutral-100 text-neutral-800 flex flex-col">
           {/* Header */}
           <div class="bg-neutral-100 shadow-md p-4 sticky top-0 z-10">
@@ -113,6 +111,5 @@ export default function Home() {
             </div>
           )}
         </div>
-      </ProtectedRoute>
   );
 }
