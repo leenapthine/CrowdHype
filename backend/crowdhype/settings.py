@@ -30,6 +30,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+APPEND_SLASH = True
+
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
 
@@ -52,6 +54,8 @@ INSTALLED_APPS = [
     'api',
     'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -100,13 +104,25 @@ DATABASES = {
     }
 }
 
-if os.getenv('CI'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': ':memory:',
-        }
-    }
+# if os.getenv('CI'):
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': os.getenv('POSTGRES_DB', 'crowdhype_db'),
+#             'USER': os.getenv('POSTGRES_USER', 'lee'),
+#             'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'supersecretpassword'),
+#             'HOST': '127.0.0.1',
+#             'PORT': '5432',
+#         }
+#     }
+
+# if os.getenv('CI'):
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': ':memory:',
+#         }
+#     }
 
 # Password validation / login/logout / dev email backend
 AUTH_USER_MODEL = 'api.CustomUser'
