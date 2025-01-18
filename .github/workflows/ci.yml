@@ -115,7 +115,7 @@ on:
       - main
 
 jobs:
-  setup:
+  test:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -130,7 +130,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
@@ -144,25 +144,21 @@ jobs:
 
       - name: Wait for PostgreSQL
         run: |
-          until pg_isready -h localhost -p 5432; do
+          until pg_isready -h 127.0.0.1 -p 5432; do
             echo "Waiting for PostgreSQL...";
             sleep 1;
           done
 
       - name: Run Migrations
         env:
-          POSTGRES_DB: crowdhype_db
-          POSTGRES_USER: lee
-          POSTGRES_PASSWORD: supersecretpassword
+          DATABASE_URL: postgres://lee:supersecretpassword@127.0.0.1:5432/crowdhype_db
         run: |
           . venv/bin/activate
           python backend/manage.py migrate
 
       - name: Run Tests
         env:
-          POSTGRES_DB: crowdhype_db
-          POSTGRES_USER: lee
-          POSTGRES_PASSWORD: supersecretpassword
+          DATABASE_URL: postgres://lee:supersecretpassword@127.0.0.1:5432/crowdhype_db
         run: |
           . venv/bin/activate
           python backend/manage.py test
