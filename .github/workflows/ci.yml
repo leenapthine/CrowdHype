@@ -123,7 +123,7 @@ jobs:
         env:
           POSTGRES_USER: lee
           POSTGRES_PASSWORD: supersecretpassword
-          # POSTGRES_DB: crowdhype_db
+          POSTGRES_DB: crowdhype_db
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
