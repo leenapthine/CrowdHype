@@ -104,18 +104,17 @@ DATABASES = {
     }
 }
 
-if os.getenv('CI'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('POSTGRES_DB', 'crowdhype_db'),
-            'USER': os.getenv('POSTGRES_USER', 'lee'),
-            'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'supersecretpassword'),
-            # 'HOST': '127.0.0.1',
-            'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
-            'PORT': '5432',
-        }
-    }
+# if os.getenv('CI'):
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': os.getenv('POSTGRES_DB', 'crowdhype_db'),
+#             'USER': os.getenv('POSTGRES_USER', 'lee'),
+#             'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'supersecretpassword'),
+#             'HOST': '127.0.0.1',
+#             'PORT': '5432',
+#         }
+#     }
 
 # if os.getenv('CI'):
 #     DATABASES = {
