@@ -124,11 +124,6 @@ jobs:
           POSTGRES_USER: lee
           POSTGRES_PASSWORD: supersecretpassword
           POSTGRES_DB: crowdhype_db
-        options: >-
-          --health-cmd "pg_isready -U \$POSTGRES_USER -d \$POSTGRES_DB"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
         ports:
           - 5432:5432
     steps:
@@ -149,21 +144,21 @@ jobs:
 
       - name: Wait for PostgreSQL
         run: |
-          until pg_isready -h localhost -p 5432 -U lee -d crowdhype_db; do
+          until pg_isready -h 127.0.0.1 -p 5432; do
             echo "Waiting for PostgreSQL...";
-            sleep 2;
+            sleep 5;
           done
 
       - name: Run Migrations
         env:
-          DATABASE_URL: postgres://lee:supersecretpassword@localhost:5432/crowdhype_db
+          DATABASE_URL: postgres://lee:supersecretpassword@127.0.0.1:5432/crowdhype_db
         run: |
           . venv/bin/activate
           python backend/manage.py migrate
 
       - name: Run Tests
         env:
-          DATABASE_URL: postgres://lee:supersecretpassword@localhost:5432/crowdhype_db
+          DATABASE_URL: postgres://lee:supersecretpassword@127.0.0.1:5432/crowdhype_db
         run: |
           . venv/bin/activate
           python backend/manage.py test
@@ -172,7 +167,10 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Run linting
         run: |
@@ -184,7 +182,10 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Set up Python environment
         uses: actions/setup-python@v4
