@@ -59,50 +59,50 @@
 #           pip install -r requirements.txt
 #           pip install -r backend/tests/requirements.txt
 
-#   linting:
-#     needs: setup
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v3
-#         with:
-#           submodules: true
+# linting:
+#   needs: setup
+#   runs-on: ubuntu-latest
+#   steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v3
+#       with:
+#         submodules: true
 
-#       - name: Run linting
-#         run: |
-#           python -m venv venv
-#           . venv/bin/activate
-#           backend/tests/linting/intest yamllint pylint unixmode
+#     - name: Run linting
+#       run: |
+#         python -m venv venv
+#         . venv/bin/activate
+#         backend/tests/linting/intest yamllint pylint unixmode
 
-#   unit-test:
-#     needs: setup
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v3
-#         with:
-#           submodules: true
+# unit-test:
+#   needs: setup
+#   runs-on: ubuntu-latest
+#   steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v3
+#       with:
+#         submodules: true
 
-#       - name: Set up Python environment
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "3.9"
+#     - name: Set up Python environment
+#       uses: actions/setup-python@v4
+#       with:
+#         python-version: "3.9"
 
-#       - name: Install dependencies
-#         run: |
-#           python -m venv venv
-#           . venv/bin/activate
-#           pip install --upgrade pip
-#           pip install -r requirements.txt
-#           pip install -r backend/tests/requirements.txt
+#     - name: Install dependencies
+#       run: |
+#         python -m venv venv
+#         . venv/bin/activate
+#         pip install --upgrade pip
+#         pip install -r requirements.txt
+#         pip install -r backend/tests/requirements.txt
 
-#       - name: Debug environment
-#         run: echo "CI=$CI"
+#     - name: Debug environment
+#       run: echo "CI=$CI"
 
-#       - name: Run unit tests with coverage
-#         run: |
-#           . venv/bin/activate
-#           ./backend/tests/coveragetest
+#     - name: Run unit tests with coverage
+#       run: |
+#         . venv/bin/activate
+#         ./backend/tests/coveragetest
 
 name: CI Pipeline
 
@@ -140,6 +140,7 @@ jobs:
           . venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
+          pip install -r backend/tests/requirements.txt
 
       - name: Wait for PostgreSQL
         run: |
@@ -155,7 +156,7 @@ jobs:
           POSTGRES_PASSWORD: supersecretpassword
         run: |
           . venv/bin/activate
-          python manage.py migrate
+          python backend/manage.py migrate
 
       - name: Run Tests
         env:
@@ -164,4 +165,49 @@ jobs:
           POSTGRES_PASSWORD: supersecretpassword
         run: |
           . venv/bin/activate
-          python manage.py test
+          python backend/manage.py test
+
+  linting:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Run linting
+        run: |
+          python -m venv venv
+          . venv/bin/activate
+          backend/tests/linting/intest yamllint pylint unixmode
+
+  unit-test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          . venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r backend/tests/requirements.txt
+
+      - name: Debug environment
+        run: echo "CI=$CI"
+
+      - name: Run unit tests with coverage
+        run: |
+          . venv/bin/activate
+          ./backend/tests/coveragetest
