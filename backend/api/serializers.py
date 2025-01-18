@@ -3,7 +3,27 @@
 Serializers for the API
 """
 from rest_framework import serializers
-from .models import Video, Artist, Festival, Like, Comment
+from .models import Video, Artist, Festival, Like, Comment, CustomUser
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for creating a user
+    """
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'password', 'email', 'role']
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data.get('email'),
+            password=validated_data['password'],
+            role=validated_data.get('role', 'member'),
+        )
+        return user
 
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
