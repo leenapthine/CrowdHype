@@ -11,35 +11,6 @@
 # jobs:
 #   setup:
 #     runs-on: ubuntu-latest
-#     services:
-#       postgres:
-#         image: postgres:latest
-#         env:
-#           POSTGRES_USER: lee
-#           POSTGRES_PASSWORD: supersecretpassword
-#           POSTGRES_DB: crowdhype_db
-#         ports:
-#           - 5432:5432
-#     steps:
-#       - uses: actions/checkout@v3
-#       - name: Set up Python
-#         uses: actions/setup-python@v3
-#         with:
-#           python-version: "3.10"
-#       - name: Install Dependencies
-#         run: |
-#           pip install -r requirements.txt
-#       - name: Run Migrations
-#         env:
-#           CI: true
-#         run: |
-#           python manage.py migrate
-#       - name: Run Tests
-#         env:
-#           CI: true
-#         run: |
-#           python manage.py test
-
 #     steps:
 #       - name: Checkout repository
 #         uses: actions/checkout@v3
@@ -141,7 +112,7 @@ jobs:
       - name: Run Migrations
         run: |
           . venv/bin/activate
-          python manage.py migrate
+          python backend/manage.py migrate
 
   linting:
     needs: setup
