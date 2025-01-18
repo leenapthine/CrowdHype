@@ -1,3 +1,109 @@
+# name: CI Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+
+# jobs:
+#   setup:
+#     runs-on: ubuntu-latest
+#     services:
+#       postgres:
+#         image: postgres:latest
+#         env:
+#           POSTGRES_USER: lee
+#           POSTGRES_PASSWORD: supersecretpassword
+#           POSTGRES_DB: crowdhype_db
+#         ports:
+#           - 5432:5432
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Set up Python
+#         uses: actions/setup-python@v3
+#         with:
+#           python-version: "3.10"
+#       - name: Install Dependencies
+#         run: |
+#           pip install -r requirements.txt
+#       - name: Run Migrations
+#         env:
+#           CI: true
+#         run: |
+#           python manage.py migrate
+#       - name: Run Tests
+#         env:
+#           CI: true
+#         run: |
+#           python manage.py test
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+#         with:
+#           submodules: true
+
+#       - name: Set up Python environment
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: "3.9"
+
+#       - name: Install dependencies
+#         run: |
+#           python -m venv venv
+#           . venv/bin/activate
+#           pip install --upgrade pip
+#           pip install -r requirements.txt
+#           pip install -r backend/tests/requirements.txt
+
+#   linting:
+#     needs: setup
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+#         with:
+#           submodules: true
+
+#       - name: Run linting
+#         run: |
+#           python -m venv venv
+#           . venv/bin/activate
+#           backend/tests/linting/intest yamllint pylint unixmode
+
+#   unit-test:
+#     needs: setup
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+#         with:
+#           submodules: true
+
+#       - name: Set up Python environment
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: "3.9"
+
+#       - name: Install dependencies
+#         run: |
+#           python -m venv venv
+#           . venv/bin/activate
+#           pip install --upgrade pip
+#           pip install -r requirements.txt
+#           pip install -r backend/tests/requirements.txt
+
+#       - name: Debug environment
+#         run: echo "CI=$CI"
+
+#       - name: Run unit tests with coverage
+#         run: |
+#           . venv/bin/activate
+#           ./backend/tests/coveragetest
+
 name: CI Pipeline
 
 on:
@@ -16,89 +122,46 @@ jobs:
         image: postgres:latest
         env:
           POSTGRES_USER: lee
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_PASSWORD: supersecretpassword
           POSTGRES_DB: crowdhype_db
         ports:
           - 5432:5432
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v3
         with:
           python-version: "3.10"
-      - name: Configure .pgpass
-        env:
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        run: |
-          echo "localhost:5432:crowdhype_db:lee:${{ secrets.POSTGRES_PASSWORD }}" > ~/.pgpass
-          chmod 600 ~/.pgpass
-      - name: Wait for PostgreSQL
-        run: |
-          until pg_isready -h localhost -p 5432; do
-            echo "Waiting for PostgreSQL...";
-            sleep 1;
-          done
-      - name: Test Database Connection
-        env:
-          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        run: |
-          psql -U lee -d crowdhype_db -h localhost -c '\l'
+
       - name: Install Dependencies
         run: |
           python -m venv venv
           . venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            echo "Waiting for PostgreSQL...";
+            sleep 1;
+          done
+
       - name: Run Migrations
         env:
-          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: crowdhype_db
+          POSTGRES_USER: lee
+          POSTGRES_PASSWORD: supersecretpassword
         run: |
           . venv/bin/activate
-          python backend/manage.py migrate
+          python manage.py migrate
 
-  linting:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-
-      - name: Run linting
-        run: |
-          python -m venv venv
-          . venv/bin/activate
-          backend/tests/linting/intest yamllint pylint unixmode
-
-  unit-test:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-
-      - name: Set up Python environment
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          . venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -r backend/tests/requirements.txt
-
-      - name: Debug environment
-        run: echo "CI=$CI"
-
-      - name: Run unit tests with coverage
+      - name: Run Tests
         env:
-          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: crowdhype_db
+          POSTGRES_USER: lee
+          POSTGRES_PASSWORD: supersecretpassword
         run: |
           . venv/bin/activate
-          ./backend/tests/coveragetest
+          python manage.py test
