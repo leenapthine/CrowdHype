@@ -1,5 +1,5 @@
 import { Navigate } from "@solidjs/router";
-import { createSignal, onMount } from "solid-js";
+import { createSignal, onMount, Show } from "solid-js";
 
 function ProtectedRoute(props) {
   const [isAuthenticated, setIsAuthenticated] = createSignal(false);
@@ -7,16 +7,16 @@ function ProtectedRoute(props) {
 
   onMount(() => {
     const token = localStorage.getItem("accessToken");
-    console.log("Token in localStorage:", token);
     const authState = !!token;
-    console.log("Setting isAuthenticated to:", authState);
     setIsAuthenticated(authState);
     setIsReady(true);
   });
 
+  return (
     <Show when={isReady()} fallback={null}>
       {isAuthenticated() ? props.children : <Navigate href="/login" />}
     </Show>
+  );
 }
 
 export default ProtectedRoute;
