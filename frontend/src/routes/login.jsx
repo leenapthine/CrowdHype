@@ -7,6 +7,7 @@ function Login() {
   const [role, setRole] = createSignal("member");
   const [error, setError] = createSignal("");
   const navigate = useNavigate();
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
