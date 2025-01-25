@@ -1,13 +1,21 @@
+import { useNavigate } from "@solidjs/router";
 import { createSignal } from "solid-js";
 import CameraPopup from "~/components/CameraPopup";
 import UploadVideo from "~/components/UploadVideo";
 import VideoList from "~/components/VideoList";
-import "~/index.css";
 
 export default function Home() {
+  const navigate = useNavigate();
   const [showCamera, setShowCamera] = createSignal(false);
   const [showUploadVideo, setShowUploadVideo] = createSignal(false);
   const [preloadedVideo, setPreloadedVideo] = createSignal(null);
+
+  const handleSignOut = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("role");
+    navigate("/login");
+  };
 
   const handleSaveVideo = (file) => {
     console.log("Video File Sent to UploadVideo:", file);
@@ -24,6 +32,26 @@ export default function Home() {
               <div class="leading-none text-left">
                 <h1 class="text-3xl font-bold">.crowd</h1>
                 <h1 class="text-4xl font-bold">HYPE</h1>
+              </div>
+              <div class="flex items-center gap-4">
+                {/* Avatar */}
+                <div
+                  class="cursor-pointer"
+                  onClick={() => navigate("/profile")}
+                >
+                  <img
+                    src="/donkey.jpg"
+                    alt="Avatar"
+                    class="w-12 h-12 rounded-full"
+                  />
+                </div>
+                {/* Sign Out Button */}
+                <button
+                  onClick={handleSignOut}
+                  class="bg-neutral-500 text-white px-4 py-2 rounded-md hover:bg-neutral-600"
+                >
+                  Sign Out
+                </button>
               </div>
               <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
                 <img 
