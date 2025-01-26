@@ -1,59 +1,97 @@
 import { createSignal, createEffect, Show, For } from "solid-js";
 
 function VideoItem(props) {
-  // props.video: { id, title, description, video_file, ... }
+  const [liked, setLiked] = createSignal(false); // Tracks if the video is liked
+  const [saved, setSaved] = createSignal(false); // Tracks if the video is saved
+  const [likeCount, setLikeCount] = createSignal(0); // Tracks total likes
+  const [comments, setComments] = createSignal([]); // Tracks comments
+  const [showCommentBox, setShowCommentBox] = createSignal(false); // Toggles comment box
+  const [newComment, setNewComment] = createSignal(""); // Tracks new comment input
 
-  // Track local "liked" state for styling (doesn't reflect the real backend state)
-  const [liked, setLiked] = createSignal(false);
+  // Fetch initial states for likes, saves, and comments
+  const fetchStates = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) return;
 
-  // Keep your existing "likeCount" if you eventually need it, but not displayed
-  const [likeCount, setLikeCount] = createSignal(0);
+      const headers = { Authorization: `Bearer ${token}` };
 
-  // Comments array
-  const [comments, setComments] = createSignal([]);
-  // Whether we show the comment box
-  const [showCommentBox, setShowCommentBox] = createSignal(false);
-  // The new comment input
-  const [newComment, setNewComment] = createSignal("");
+      // Fetch like state and count
+      const likeResponse = await fetch(`http://127.0.0.1:8000/api/likes/${props.video.id}/`, { headers });
+      if (likeResponse.ok) {
+        const likeData = await likeResponse.json();
+        setLiked(likeData.is_liked);
+        setLikeCount(likeData.like_count); // Assuming like_count is included in the response
+      }
 
-  // 1) Load likes and comments from the backend
+      // Fetch save state
+      const saveResponse = await fetch(`http://127.0.0.1:8000/api/saved-videos/is-saved/?video_id=${props.video.id}`, { headers });
+      if (saveResponse.ok) {
+        const saveData = await saveResponse.json();
+        setSaved(saveData.is_saved);
+      }
+
+      // Fetch comments
+      const commentResponse = await fetch(`http://127.0.0.1:8000/api/comments/?video=${props.video.id}`);
+      if (commentResponse.ok) {
+        const commentData = await commentResponse.json();
+        setComments(commentData);
+      }
+    } catch (error) {
+      console.error("Error fetching states:", error);
+    }
+  };
+
   createEffect(() => {
-    if (!props.video.id) return;
-
-    // Fetch likes (if you still want to track them)
-    fetch(`http://127.0.0.1:8000/api/likes/?video=${props.video.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setLikeCount(data.length);
-      })
-      .catch(console.error);
-
-    // Fetch comments
-    fetch(`http://127.0.0.1:8000/api/comments/?video=${props.video.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setComments(data);
-      })
-      .catch(console.error);
+    if (props.video.id) {
+      fetchStates();
+    }
   });
 
-  // 2) Handle "Like" (still calls your backend, but also toggles local "liked" style)
+  // Handle like action
   const handleLike = async () => {
     try {
-      await fetch("http://127.0.0.1:8000/api/likes/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user: 1,  // Hard-coded for now
-          video: props.video.id,
-        }),
+      const token = localStorage.getItem("accessToken");
+      if (!token) return console.error("User is not authenticated");
+
+      const response = await fetch("http://127.0.0.1:8000/api/likes/like-video/", {
+        method: liked() ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ video: props.video.id }),
       });
-      // Locally toggle "liked" styling
-      setLiked(!liked());
-      // Optionally increment likeCount if you still want to track it
-      // setLikeCount(likeCount() + 1);
-    } catch (err) {
-      console.error(err);
+
+      if (response.ok) {
+        setLiked(!liked());
+        setLikeCount(liked() ? likeCount() - 1 : likeCount() + 1);
+      }
+    } catch (error) {
+      console.error("Error liking video:", error);
+    }
+  };
+
+  // Handle save action
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) return console.error("User is not authenticated");
+
+      const response = await fetch(`http://127.0.0.1:8000/api/saved-videos/${saved() ? "unsave/" : "save/"}`, {
+        method: saved() ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ video: props.video.id }),
+      });
+
+      if (response.ok) {
+        setSaved(!saved());
+      }
+    } catch (error) {
+      console.error("Error saving video:", error);
     }
   };
 
@@ -62,29 +100,32 @@ function VideoItem(props) {
     setShowCommentBox(!showCommentBox());
   };
 
-  // 4) Handle submitting a new comment
+  // Handle comment submission
   const handleCommentSubmit = async (event) => {
     event.preventDefault();
     try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) return console.error("User is not authenticated");
+
       const response = await fetch("http://127.0.0.1:8000/api/comments/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
-          user: 1,  // Hard-coded for now
           video: props.video.id,
           content: newComment(),
         }),
       });
+
       if (response.ok) {
         const createdComment = await response.json();
-        // Prepend the new comment at top if you want, or just append
         setComments([...comments(), createdComment]);
         setNewComment("");
-      } else {
-        console.error("Failed to post comment");
       }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error("Error posting comment:", error);
     }
   };
 
@@ -138,6 +179,19 @@ function VideoItem(props) {
             {/* Comment bubble emoji (💬) */}
             <span>💬</span>
             <span>Comment</span>
+          </button>
+          <button
+            onClick={handleSave}
+            class={
+              `flex items-center space-x-1 text-sm font-medium
+               border-none bg-transparent 
+               hover:text-red-600 focus:outline-none focus:ring-2 
+               focus:ring-red-300 transition-colors ` +
+              (saved() ? "text-red-600" : "text-slate-600")
+            }
+          >
+            <span>{saved() ? "❤️" : "🤍"}</span>
+            <span>{saved() ? "Saved" : "Save"}</span>
           </button>
         </div>
 
