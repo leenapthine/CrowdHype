@@ -51,8 +51,8 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SavedVideoSerializer(serializers.ModelSerializer):
-    video = VideoSerializer() 
-    
+    video = VideoSerializer()
+
     class Meta:
         model = SavedVideo
         fields = ['id', 'user', 'video', 'created_at']
