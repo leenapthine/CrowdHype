@@ -33,26 +33,6 @@ export default function Home() {
                 <h1 class="text-3xl font-bold">.crowd</h1>
                 <h1 class="text-4xl font-bold">HYPE</h1>
               </div>
-              <div class="flex items-center gap-4">
-                {/* Avatar */}
-                <div
-                  class="cursor-pointer"
-                  onClick={() => navigate("/profile")}
-                >
-                  <img
-                    src="/donkey.jpg"
-                    alt="Avatar"
-                    class="w-12 h-12 rounded-full"
-                  />
-                </div>
-                {/* Sign Out Button */}
-                <button
-                  onClick={handleSignOut}
-                  class="bg-neutral-500 text-white px-4 py-2 rounded-md hover:bg-neutral-600"
-                >
-                  Sign Out
-                </button>
-              </div>
               <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
                 <img 
                   src="/rec-button.png" 
@@ -73,12 +53,28 @@ export default function Home() {
                     md:rounded-r-none md:rounded-b-none md:overflow-y-auto md:h-screen"
             >
               <h2 class="text-lg font-semibold mb-4">User Profile</h2>
-              <p class="text-sm text-neutral-600">
-                {/* Put any content here: trending videos, user stats, etc. */}
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                Maecenas euismod, lacus at vestibulum semper, sapien diam 
-                hendrerit est, nec tempus enim massa id arcu.
-              </p>
+
+              {/* Avatar */}
+              <div class="flex items-center gap-4 mb-4">
+                <img
+                  src="/donkey.jpg"
+                  alt="Avatar"
+                  class="w-12 h-12 rounded-full cursor-pointer"
+                  onClick={() => navigate("/profile")}
+                />
+                <div>
+                  <p class="text-lg font-medium">Username</p>
+                  <p class="text-sm text-neutral-500">User Role</p> {/* Optional additional info */}
+                </div>
+              </div>
+
+              {/* Sign Out Button */}
+              <button
+                onClick={handleSignOut}
+                class="bg-neutral-500 text-white px-4 py-2 rounded-md hover:bg-neutral-600 w-full"
+              >
+                Sign Out
+              </button>
             </aside>
 
             {/* Feed Section (center) */}
