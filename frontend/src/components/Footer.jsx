@@ -1,8 +1,4 @@
 import { useNavigate } from "@solidjs/router";
-import { Dynamic } from "solid-js/web";
-import Search from "lucide-react/icons/search";
-import Heart from "lucide-react/icons/heart";
-import Sliders from "lucide-react/icons/sliders";
 
 export default function Footer() {
   const navigate = useNavigate();
@@ -15,27 +11,27 @@ export default function Footer() {
       {/* Search Button (Placeholder) */}
       <button
         onClick={() => console.log("Search clicked")}
-        class="flex flex-col items-center text-center"
+        class="flex flex-col items-center text-center hover:text-red-400 transition-colors"
       >
-        <Dynamic component={Search} class="text-xl" />
+        <span class="text-xl">△</span>
         <span>Search</span>
       </button>
 
       {/* Saved Videos Link */}
       <button
         onClick={() => navigate("/saved")}
-        class="flex flex-col items-center text-center"
+        class="flex flex-col items-center text-center hover:text-red-400 transition-colors"
       >
-        <Dynamic component={Heart} class="text-xl" />
+        <span class="text-xl">♡</span> {/* Outline heart */}
         <span>Saved</span>
       </button>
 
       {/* Filter Button (Placeholder) */}
       <button
         onClick={() => console.log("Filter clicked")}
-        class="flex flex-col items-center text-center"
+        class="flex flex-col items-center text-center hover:text-red-400 transition-colors"
       >
-        <Dynamic component={Sliders} class="text-xl" />
+        <span class="text-xl">⦾</span>
         <span>Filter</span>
       </button>
     </footer>
