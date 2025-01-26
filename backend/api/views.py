@@ -44,26 +44,27 @@ class SavedVideoViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
-    
+
     @action(detail=False, methods=["get"])
     def get(self, request):
         """
         Get all saved videos for the authenticated user.
         """
+        # pylint: disable=unused-argument
+        # - action decorator requires the request argument
         saved_videos = self.get_queryset()
         serializer = self.get_serializer(saved_videos, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     @action(detail=True, methods=["get"])
     def is_saved(self, request, pk=None):
         """
         Check if a specific video is saved
         """
-        video_id = request.query_params.get('video_id')
-        if not video_id:
-            return Response({"error": "Video ID is required"}, status=400)
-        
-        is_saved = SavedVideo.objects.filter(user=request.user, video_id=video_id).exists()
+        if pk is None:
+            return Response({"error": "Video ID (pk) is required"}, status=400)
+
+        is_saved = SavedVideo.objects.filter(user=request.user, video_id=pk).exists()
         return Response({"is_saved": is_saved})
 
     @action(detail=False, methods=["post"])
@@ -86,7 +87,7 @@ class SavedVideoViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(saved_video)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
+
     @action(detail=False, methods=["delete"])
     def unsave(self, request):
         """
@@ -96,7 +97,9 @@ class SavedVideoViewSet(viewsets.ModelViewSet):
         saved_video = SavedVideo.objects.filter(user=request.user, video_id=video_id).first()
         if saved_video:
             saved_video.delete()
-            return Response({"message": "Video unsaved successfully"}, status=status.HTTP_204_NO_CONTENT)
+            return Response(
+                {"message": "Video unsaved successfully"}, status=status.HTTP_204_NO_CONTENT
+            )
 
         return Response({"error": "Save not found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -113,66 +116,8 @@ class FestivalViewSet(viewsets.ModelViewSet):
     serializer_class = FestivalSerializer
 
 class LikeViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet for handling likes
-    """
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        """
-        Return likes for the authenticated user
-        """
-        return self.queryset.filter(user=self.request.user)
-
-    @action(detail=True, methods=["get"])
-    def is_liked(self, request, pk=None):
-        """
-        Check if a specific video is liked by the user
-        """
-        video_id = pk
-        is_liked = Like.objects.filter(user=request.user, video_id=video_id).exists()
-        return Response({"is_liked": is_liked}, status=status.HTTP_200_OK)
-
-    @action(detail=False, methods=["get"])
-    def get_liked_videos(self, request):
-        """
-        Get all liked videos for the authenticated user
-        """
-        likes = self.get_queryset()
-        serializer = self.get_serializer(likes, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(detail=False, methods=["post"])
-    def like_video(self, request):
-        """
-        Like a video
-        """
-        video_id = request.data.get('video')
-        if not video_id:
-            return Response({"error": "Video ID is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        like, created = Like.objects.get_or_create(user=request.user, video_id=video_id)
-
-        if created:
-            return Response({"message": "Video liked successfully"}, status=status.HTTP_201_CREATED)
-        else:
-            return Response({"message": "Video already liked"}, status=status.HTTP_200_OK)
-
-    @action(detail=False, methods=["delete"])
-    def unlike_video(self, request):
-        """
-        Unlike a video
-        """
-        video_id = request.data.get('video')
-        like = Like.objects.filter(user=request.user, video_id=video_id).first()
-
-        if like:
-            like.delete()
-            return Response({"message": "Video unliked successfully"}, status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response({"error": "Like not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
