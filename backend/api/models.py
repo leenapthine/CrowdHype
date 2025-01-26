@@ -21,6 +21,26 @@ class Video(models.Model):
     def __str__(self):
         return str(self.title)
 
+class SavedVideo(models.Model):
+    """
+    Model for saved videos
+    """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='saved_videos')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        """
+        Meta class for SavedVideo
+        """
+        # pylint: disable=too-few-public-methods
+        unique_together = ('user', 'video')
+
+    def __str__(self):
+        # pylint: disable=no-member
+        # - pylint cannot infer object attribute username and title
+        return f"{self.user.username} saved {self.video.title}"
+
 class Artist(models.Model):
     """
     Artist model

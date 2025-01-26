@@ -88,6 +88,18 @@ function Login() {
         >
           Login
         </button>
+        {/* Add the Sign Up Link */}
+        <div class="mt-4 text-center">
+          <p class="text-sm text-neutral-600">
+            Don't have an account?{" "}
+            <span
+              class="text-blue-600 hover:underline cursor-pointer"
+              onClick={() => navigate("/signup")}
+            >
+              Sign Up
+            </span>
+          </p>
+        </div>
       </form>
     </div>
   );

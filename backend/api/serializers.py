@@ -3,7 +3,7 @@
 Serializers for the API
 """
 from rest_framework import serializers
-from .models import Video, Artist, Festival, Like, Comment, CustomUser
+from .models import Video, Artist, Festival, Like, Comment, CustomUser, SavedVideo
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -49,3 +49,10 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+
+class SavedVideoSerializer(serializers.ModelSerializer):
+    video = VideoSerializer()
+
+    class Meta:
+        model = SavedVideo
+        fields = ['id', 'user', 'video', 'created_at']
