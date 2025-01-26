@@ -2,6 +2,8 @@ import { MetaProvider, Title } from "@solidjs/meta";
 import { Router, Route } from "@solidjs/router";
 import ProtectedRoute from "~/components/ProtectedRoute";
 import UserProfile from "~/routes/userProfile";
+import SavedVideos from "~/routes/savedVideos";
+import SignUp from "~/routes/signup";
 import Home from "~/routes/home";
 import Login from "~/routes/login";
 import "./index.css";
@@ -20,6 +22,7 @@ export default function App() {
     >
       {/* Public routes */}
       <Route path="/login" component={() => Login } />
+      <Route path="/signup" component={SignUp} />
 
       {/* Protected routes */}
       <Route
@@ -35,6 +38,14 @@ export default function App() {
         component={() => (
           <ProtectedRoute>
             <UserProfile />
+          </ProtectedRoute>
+        )}
+      />
+      <Route
+        path="/saved"
+        component={() => (
+          <ProtectedRoute>
+            <SavedVideos />
           </ProtectedRoute>
         )}
       />
