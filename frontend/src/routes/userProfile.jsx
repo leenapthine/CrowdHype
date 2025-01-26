@@ -1,4 +1,5 @@
 import { createSignal } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 
 export default function UserProfile() {
   const [user] = createSignal({
@@ -6,6 +7,8 @@ export default function UserProfile() {
     name: "John Doe",
     location: "New York, USA",
   });
+
+  const navigate = useNavigate();
 
   return (
     <div class="min-h-screen bg-gray-50 flex flex-col items-center">
@@ -30,7 +33,12 @@ export default function UserProfile() {
           <li class="text-blue-600 hover:underline cursor-pointer">Personal Information</li>
           <li class="text-blue-600 hover:underline cursor-pointer">Notification</li>
           <li class="text-blue-600 hover:underline cursor-pointer">Wishlist</li>
-          <li class="text-blue-600 hover:underline cursor-pointer">Saved</li>
+          <li
+            class="text-blue-600 hover:underline cursor-pointer"
+            onClick={() => navigate("/saved")} // Navigate to /saved
+          >
+            Saved
+          </li>
           <li class="text-blue-600 hover:underline cursor-pointer">Settings</li>
         </ul>
       </div>
