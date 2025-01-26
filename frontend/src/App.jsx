@@ -3,6 +3,7 @@ import { Router, Route } from "@solidjs/router";
 import ProtectedRoute from "~/components/ProtectedRoute";
 import UserProfile from "~/routes/userProfile";
 import SavedVideos from "~/routes/savedVideos";
+import Footer from "~/components/Footer";
 import SignUp from "~/routes/signup";
 import Home from "~/routes/home";
 import Login from "~/routes/login";
@@ -30,6 +31,7 @@ export default function App() {
         component={() => (
           <ProtectedRoute>
             <Home />
+            <Footer />
           </ProtectedRoute>
         )}
       />
@@ -38,6 +40,7 @@ export default function App() {
         component={() => (
           <ProtectedRoute>
             <UserProfile />
+            <Footer />
           </ProtectedRoute>
         )}
       />
