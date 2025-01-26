@@ -1,4 +1,5 @@
 import { createSignal, createEffect } from "solid-js";
+import Footer from "~/components/Footer";
 
 export default function SavedVideos() {
   const [savedVideos, setSavedVideos] = createSignal([]);
@@ -61,6 +62,7 @@ export default function SavedVideos() {
           )}
         </div>
       )}
+      <Footer />
     </div>
   );
 }
