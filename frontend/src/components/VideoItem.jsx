@@ -1,6 +1,8 @@
+import { useNavigate } from "@solidjs/router";
 import { createSignal, createEffect, Show, For } from "solid-js";
 
 function VideoItem(props) {
+  const navigate = useNavigate(); // Initialize the navigation function
   const [liked, setLiked] = createSignal(false); // Tracks if the video is liked
   const [saved, setSaved] = createSignal(false); // Tracks if the video is saved
   const [likeCount, setLikeCount] = createSignal(0); // Tracks total likes
@@ -133,18 +135,23 @@ function VideoItem(props) {
     <div class="mx-auto max-w-md w-full mb-6">
       {/* VIDEO CONTAINER (darker tint) */}
       <div class="bg-neutral-100 shadow-md rounded-t-xl p-4">
-        {/* If you want to display title/description, uncomment: */}
-        <h3 class="text-lg font-bold text-neutral-800 mb-2">{props.video.title}</h3>
-        <p class="text-sm text-neutral-600 mb-3">{props.video.description}</p>
-
-        <video
-          width="320"
-          controls
-          class="border border-slate-300 rounded mb-3 mx-auto block"
+        <div 
+            class="cursor-pointer"
+            onClick={() => navigate(`/details/${props.video.id}`)} // Navigate to details on click
         >
-          <source src={props.video.video_file} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+          {/* If you want to display title/description, uncomment: */}
+          <h3 class="text-lg font-bold text-neutral-800 mb-2">{props.video.title}</h3>
+          <p class="text-sm text-neutral-600 mb-3">{props.video.description}</p>
+
+          <video
+            width="320"
+            controls
+            class="border border-slate-300 rounded mb-3 mx-auto block"
+          >
+            <source src={props.video.video_file} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
       </div>
 
       {/* CONTROLS CONTAINER (lighter tint) */}
