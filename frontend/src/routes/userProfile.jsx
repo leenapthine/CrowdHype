@@ -14,7 +14,20 @@ export default function UserProfile() {
     <div class="min-h-screen bg-gray-50 flex flex-col items-center">
       {/* Header */}
       <header class="bg-white shadow-md w-full p-4">
-        <h1 class="text-center text-2xl font-semibold">User Profile</h1>
+      <div class="bg-neutral-100 shadow-md p-4 top-0 z-10 flex items-center justify-between">  
+          {/* CrowdHYPE Branding */}
+          <div
+            class="text-left cursor-pointer"
+            onClick={() => navigate("/home")} // Navigate to the home page
+          >
+            <h1 class="text-3xl font-bold">.crowd</h1>
+            <h1 class="text-4xl font-bold">HYPE</h1>
+          </div>
+
+          <h1 class="text-2xl font-semibold text-center absolute left-1/2 transform -translate-x-1/2">
+            Saved Videos
+          </h1>        
+        </div>
       </header>
 
       {/* Profile Details */}
