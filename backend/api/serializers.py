@@ -3,8 +3,17 @@
 Serializers for the API
 """
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import Video, Artist, Festival, Like, Comment, CustomUser, SavedVideo
 
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Custom token serializer to include user role
+    """
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data["role"] = self.user.role
+        return data
 
 class UserSerializer(serializers.ModelSerializer):
     """

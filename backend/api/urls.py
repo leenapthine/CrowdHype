@@ -13,6 +13,7 @@ from .views import (
     CommentViewSet,
     SignUpView,
     SavedVideoViewSet,
+    CustomTokenObtainPairView,
 )
 
 router = DefaultRouter()
@@ -26,7 +27,7 @@ router.register(r'saved-videos', SavedVideoViewSet, basename='savedvideo')
 urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
     path('', include(router.urls)),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('saved-videos/is-saved/', SavedVideoViewSet.as_view({'get': 'is_saved'}), name='is-saved'),
 ]

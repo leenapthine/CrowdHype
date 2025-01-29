@@ -2,10 +2,13 @@
 """
 This file contains the views for the API.
 """
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from .models import Video, Artist, Festival, Like, Comment, SavedVideo
 from .serializers import (
@@ -16,7 +19,22 @@ from .serializers import (
     CommentSerializer,
     UserSerializer,
     SavedVideoSerializer,
+    CustomTokenObtainPairSerializer
 )
+
+@api_view(["POST"])
+def login_view(request):
+    username = request.data.get("username")
+    password = request.data.get("password")
+    user = authenticate(username=username, password=password)
+
+    if user:
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({
+            "accessToken": str(token),
+            "role": user.role
+        })
+    return Response({"error": "Invalid credentials"}, status=400)
 
 class SignUpView(APIView):
     """
@@ -122,3 +140,6 @@ class LikeViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
