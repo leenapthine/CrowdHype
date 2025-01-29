@@ -1,8 +1,10 @@
 import { MetaProvider, Title } from "@solidjs/meta";
 import { Router, Route } from "@solidjs/router";
+import { createSignal } from "solid-js";
 import ProtectedRoute from "~/components/ProtectedRoute";
 import UserProfile from "~/routes/userProfile";
 import SavedVideos from "~/routes/savedVideos";
+import Details from "./routes/details";
 import Footer from "~/components/Footer";
 import SignUp from "~/routes/signup";
 import Home from "~/routes/home";
@@ -10,6 +12,8 @@ import Login from "~/routes/login";
 import "./index.css";
 
 export default function App() {
+  const [showFooter, setShowFooter] = createSignal(true);
+
   return (
     <Router
       root={(props) => (
@@ -30,8 +34,8 @@ export default function App() {
         path="/home/*"
         component={() => (
           <ProtectedRoute>
-            <Home />
-            <Footer />
+            <Home setShowFooter={setShowFooter} />
+            {showFooter() && <Footer />}
           </ProtectedRoute>
         )}
       />
@@ -49,6 +53,14 @@ export default function App() {
         component={() => (
           <ProtectedRoute>
             <SavedVideos />
+          </ProtectedRoute>
+        )}
+      />
+      <Route
+        path="/details/:id"
+        component={() => (
+          <ProtectedRoute>
+            <Details />
           </ProtectedRoute>
         )}
       />

@@ -4,7 +4,7 @@ import CameraPopup from "~/components/CameraPopup";
 import UploadVideo from "~/components/UploadVideo";
 import VideoList from "~/components/VideoList";
 
-export default function Home() {
+export default function Home({ setShowFooter }) {
   const navigate = useNavigate();
   const [showCamera, setShowCamera] = createSignal(false);
   const [showUploadVideo, setShowUploadVideo] = createSignal(false);
@@ -22,6 +22,7 @@ export default function Home() {
     setPreloadedVideo(file);
     setShowCamera(false);
     setShowUploadVideo(true);
+    setShowFooter(true); // Re-show the footer after recording
   };
 
   return (
@@ -38,7 +39,10 @@ export default function Home() {
                   src="/rec-button.png" 
                   alt="rec" 
                   class="h-14 w-auto mr-0 cursor-pointer"
-                  onClick={() => setShowCamera(true)}
+                  onClick={() => {
+                    setShowCamera(true);
+                    setShowFooter(false);
+                  }}
                 />
               </div>
             </header>
@@ -71,7 +75,7 @@ export default function Home() {
               {/* Sign Out Button */}
               <button
                 onClick={handleSignOut}
-                class="bg-neutral-500 text-white px-4 py-2 rounded-md hover:bg-neutral-600 w-full"
+                class="bg-neutral-500 text-white px-4 py-2 rounded-md hover:bg-neutral-600"
               >
                 Sign Out
               </button>
@@ -112,10 +116,13 @@ export default function Home() {
                     flex items-center justify-center
                     z-50"
             >
-              <CameraPopup 
-                onClose={() => setShowCamera(false)}
+              <CameraPopup
+                onClose={() => {
+                  setShowCamera(false);
+                  setShowFooter(true); // Re-show footer on camera popup close
+                }}
                 onSave={handleSaveVideo}
-            />
+              />
             </div>
           )}
 
