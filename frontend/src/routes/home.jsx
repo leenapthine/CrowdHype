@@ -56,29 +56,34 @@ export default function Home({ setShowFooter }) {
                     md:border-b-0 md:border-r md:border-neutral-300 bg-white shadow-xl rounded-b-2xl 
                     md:rounded-r-none md:rounded-b-none md:overflow-y-auto md:h-screen"
             >
-              <h2 class="text-lg font-semibold mb-4">User Profile</h2>
-
-              {/* Avatar */}
-              <div class="flex items-center gap-4 mb-4">
+              <div class="flex items-center gap-4 p-0">
+                {/* Avatar */}
                 <img
                   src="/donkey.jpg"
                   alt="Avatar"
                   class="w-12 h-12 rounded-full cursor-pointer"
                   onClick={() => navigate("/profile")}
                 />
-                <div>
+                
+                {/* User Info & Actions */}
+                <div class="flex flex-col">
                   <p class="text-lg font-medium">Username</p>
                   <p class="text-sm text-neutral-500">User Role</p> {/* Optional additional info */}
+                  <span
+                    class="text-sm cursor-pointer text-neutral-500 hover:text-red-600 transition-colors"
+                      onClick={handleSignOut}
+                  >Sign Out
+                  </span>
+                  
+                  {localStorage.getItem("role") === "promoter" && (
+                    <span
+                      class="text-sm cursor-pointer text-neutral-500 hover:text-red-600 transition-colors"
+                      onClick={() => navigate("/dashboard")}
+                    >Dashboard
+                    </span>
+                  )}
                 </div>
               </div>
-
-              {/* Sign Out Button */}
-              <button
-                onClick={handleSignOut}
-                class="bg-neutral-500 text-white px-4 py-2 rounded-md hover:bg-neutral-600"
-              >
-                Sign Out
-              </button>
             </aside>
 
             {/* Feed Section (center) */}
