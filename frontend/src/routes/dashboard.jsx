@@ -7,7 +7,10 @@ export default function Dashboard() {
     <div class="min-h-screen bg-gray-50 flex flex-col items-center">
       {/* Header */}
       <header class="bg-white shadow-md w-full p-4 flex justify-between items-center">
-        <div class="leading-none text-left" onClick={() => navigate("/home")}>
+        <div class="leading-none text-left cursor-pointer" 
+            onClick={() => navigate("/home")}
+            
+        >
           <h1 class="text-3xl font-bold">.crowd</h1>
           <h1 class="text-4xl font-bold">HYPE</h1>
         </div>
@@ -24,10 +27,10 @@ export default function Dashboard() {
         <h2 class="text-xl font-semibold mb-4">Festival Cards</h2>
         <div class="grid grid-cols-3 gap-4">
           {/* Example festival cards */}
-          <div class="bg-gray-300 w-24 h-24 rounded flex items-center justify-center">
+          <div class="bg-gray-300 w-24 h-24 rounded flex items-center justify-center cursor-pointer">
             <img src="/shamb.png" alt="Shambhala Festival" class="w-full h-full object-cover rounded" />
           </div>
-          <div class="bg-gray-300 w-24 h-24 rounded flex items-center justify-center">
+          <div class="bg-gray-300 w-24 h-24 rounded flex items-center justify-center cursor-pointer">
             <img src="/lib.jpg" alt="Lib Festival" class="w-full h-full object-cover rounded" />
           </div>
 
