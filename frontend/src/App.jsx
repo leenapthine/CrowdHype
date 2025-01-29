@@ -1,9 +1,10 @@
 import { MetaProvider, Title } from "@solidjs/meta";
-import { Router, Route } from "@solidjs/router";
+import { Router, Route, Navigate } from "@solidjs/router";
 import { createSignal } from "solid-js";
 import ProtectedRoute from "~/components/ProtectedRoute";
 import UserProfile from "~/routes/userProfile";
 import SavedVideos from "~/routes/savedVideos";
+import Dashboard from "~/routes/dashboard";
 import Details from "./routes/details";
 import Footer from "~/components/Footer";
 import SignUp from "~/routes/signup";
@@ -13,6 +14,7 @@ import "./index.css";
 
 export default function App() {
   const [showFooter, setShowFooter] = createSignal(true);
+  const role = localStorage.getItem("role");
 
   return (
     <Router
@@ -24,8 +26,9 @@ export default function App() {
           {props.children}
         </>
       )}
-    >
+    >      
       {/* Public routes */}
+      <Route path="/" component={() => <Navigate href={role === "promoter" ? "/dashboard" : "/home"} />} />
       <Route path="/login" component={() => Login } />
       <Route path="/signup" component={SignUp} />
 
@@ -61,6 +64,15 @@ export default function App() {
         component={() => (
           <ProtectedRoute>
             <Details />
+          </ProtectedRoute>
+        )}
+      />
+      {/* Promoter Routes */}
+      <Route
+        path="/dashboard"
+        component={() => (
+          <ProtectedRoute promoterOnly={true}>
+            <Dashboard />
           </ProtectedRoute>
         )}
       />
