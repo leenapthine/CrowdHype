@@ -4,7 +4,6 @@ import { useNavigate } from "@solidjs/router";
 function Login() {
   const [username, setUsername] = createSignal("");
   const [password, setPassword] = createSignal("");
-  const [role, setRole] = createSignal("member");
   const [error, setError] = createSignal("");
   const navigate = useNavigate();
 
@@ -28,18 +27,19 @@ function Login() {
       }
 
       const data = await response.json();
-      localStorage.setItem("accessToken", data.access);
-      localStorage.setItem("refreshToken", data.refresh);
-      localStorage.setItem("role", role());
+      if (data.access) {
+        localStorage.setItem("accessToken", data.access);
+        localStorage.setItem("refreshToken", data.refresh);
+        localStorage.setItem("role", data.role);
 
-      // Navigate to the homepage after login
-      navigate("/home");
+        // Redirect user based on role
+        navigate(data.role === "promoter" ? "/dashboard" : "/home");
+
+      }
     } catch (err) {
       setError(err.message);
     }
   };
-
-  console.log("Rendering Login Page");
 
   return (
     <div class="flex flex-col items-center justify-center min-h-screen bg-neutral-100">
@@ -73,14 +73,6 @@ function Login() {
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1">Role</label>
-          <select
-            value={role()}
-            onInput={(e) => setRole(e.currentTarget.value)}
-            class="w-full p-2 border rounded-md"
-          >
-            <option value="member">Member</option>
-            <option value="promoter">Promoter</option>
-          </select>
         </div>
         <button
           type="submit"
