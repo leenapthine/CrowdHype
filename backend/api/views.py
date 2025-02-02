@@ -2,14 +2,19 @@
 """
 This file contains the views for the API.
 """
+# Django Imports
 from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
-from rest_framework_simplejwt.views import TokenObtainPairView
+
+# Third-Party Imports (DRF, SimpleJWT)
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action, api_view
-from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+# Local Imports (Models & Serializers)
 from .models import Video, Artist, Festival, Like, Comment, SavedVideo
 from .serializers import (
     VideoSerializer,
@@ -24,6 +29,8 @@ from .serializers import (
 
 @api_view(["POST"])
 def login_view(request):
+    """ API endpoint for user login
+    """
     username = request.data.get("username")
     password = request.data.get("password")
     user = authenticate(username=username, password=password)
@@ -134,14 +141,18 @@ class FestivalViewSet(viewsets.ModelViewSet):
     serializer_class = FestivalSerializer
 
     @action(detail=True, methods=['patch'])
-    def toggle_privacy(self, request, pk=None):
+    def toggle_privacy(self, _request, _pk=None):
+        """ Toggle the privacy of a festival
+        """
         festival = self.get_object()
         festival.is_public = not festival.is_public
         festival.save()
         return Response({"is_public": festival.is_public})
 
     @action(detail=True, methods=['delete'])
-    def delete_festival(self, request, pk=None):
+    def delete_festival(self, _request, _pk=None):
+        """ Delete a festival
+        """
         festival = self.get_object()
         festival.delete()
         return Response({"message": "Festival deleted"}, status=status.HTTP_204_NO_CONTENT)

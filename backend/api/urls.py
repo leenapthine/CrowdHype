@@ -30,6 +30,10 @@ urlpatterns = [
     path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('saved-videos/is-saved/', SavedVideoViewSet.as_view({'get': 'is_saved'}), name='is-saved'),
-    path('festivals/<int:pk>/toggle_privacy/', FestivalViewSet.as_view({'patch': 'toggle_privacy'}), name='toggle_privacy'),
-    path('festivals/<int:pk>/delete/', FestivalViewSet.as_view({'delete': 'delete_festival'}), name='delete_festival'),
+    path('festivals/<int:pk>/toggle_privacy/', FestivalViewSet.as_view({
+        'patch': 'toggle_privacy'
+    }), name='toggle_privacy'),
+    path('festivals/<int:pk>/delete/', FestivalViewSet.as_view({
+        'delete': 'delete_festival'
+    }), name='delete_festival'),
 ]
