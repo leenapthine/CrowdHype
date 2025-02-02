@@ -159,6 +159,7 @@ class FestivalViewSet(viewsets.ModelViewSet):
         return Response({"is_public": festival.is_public})
 
     @action(detail=True, methods=['delete'])
+    # pylint: disable=unused-argument
     def delete_festival(self, request, pk=None):
         """ Delete a festival
         """
@@ -169,9 +170,10 @@ class FestivalViewSet(viewsets.ModelViewSet):
             image_path = os.path.join(settings.MEDIA_ROOT, str(festival.image))
             if os.path.exists(image_path):
                 os.remove(image_path)
-                
+
         festival.delete()
         return Response({"message": "Festival deleted"}, status=status.HTTP_204_NO_CONTENT)
+    # pylint: enable=unused-argument
 
 class LikeViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all()

@@ -49,7 +49,16 @@ class ArtistSerializer(serializers.ModelSerializer):
 class FestivalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Festival
-        fields = ['id', 'name', 'description', 'start_date', 'end_date', 'location', 'image', 'is_public']
+        fields = [
+            'id',
+            'name',
+            'description',
+            'start_date',
+            'end_date',
+            'location',
+            'image',
+            'is_public'
+        ]
 
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:

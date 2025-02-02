@@ -1,4 +1,6 @@
+import json
 from tests.unittests.base_test import TestCaseBase
+from rest_framework.test import APIClient
 from rest_framework import status
 from api.models import Video, Artist, Festival, Like, Comment, CustomUser
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -8,13 +10,31 @@ class TestViews(TestCaseBase):
     def setUp(self):
         """Setup common data for tests"""
         super().setUp()
-        # Create a test user
-        self.user = CustomUser.objects.create_user(username="testuser", password="password")
-        self.client.login(username="testuser", password="password")
 
-        Video.objects.all().delete()  # Ensure no leftover videos
-        
-        # Create a sample video
+        self.client = APIClient()
+
+        # Create a test user with a known password
+        self.user = CustomUser.objects.create_user(username="testuser", password="password", role="promoter")
+
+        # Ensure the test database is clean
+        Video.objects.all().delete()
+
+        # Get JWT token (Fix: Ensure matching username/password)
+        response = self.client.post("/api/token/", {
+            "username": "testuser",
+            "password": "password"
+        }) 
+
+        # Ensure 'access' exists, otherwise raise an error
+        if "access" not in response.data:
+            raise ValueError(f"Token response error: {response.json()}")  
+
+        self.access_token = response.data["access"]
+
+        # Set authentication headers for all test API calls
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")
+
+        # Create sample video
         self.video = Video.objects.create(
             title="Test Video",
             description="Test Description",
@@ -22,13 +42,7 @@ class TestViews(TestCaseBase):
             video_file=SimpleUploadedFile("test.mp4", b"file_content", content_type="video/mp4"),
         )
 
-        # Create a sample artist
-        self.artist = Artist.objects.create(
-            name="Test Artist",
-            bio="This is a test bio."
-        )
-
-        # Create a sample festival
+        # Create sample festival
         self.festival = Festival.objects.create(
             name="Test Festival",
             description="Test Description",
@@ -37,13 +51,19 @@ class TestViews(TestCaseBase):
             location="Test Location",
         )
 
-        # Create a sample like
+        # Create sample artist
+        self.artist = Artist.objects.create(
+            name="Test Artist",
+            bio="This is a test bio."
+        )
+
+        # Create sample like
         self.like = Like.objects.create(
             user=self.user,
             video=self.video,
         )
 
-        # Create a sample comment
+        # Create sample comment
         self.comment = Comment.objects.create(
             user=self.user,
             video=self.video,
@@ -82,7 +102,7 @@ class TestViews(TestCaseBase):
         }
         response = self.client.patch(
             f"/api/videos/{self.video.id}/",
-            updated_data,
+            data=json.dumps(updated_data, ensure_ascii=False),
             content_type="application/json",  # Specify the correct content type
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -105,6 +125,9 @@ class TestViews(TestCaseBase):
 
     def test_festival_list(self):
         """Test retrieving the list of festivals"""
+        # Authenticate test client
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")
+
         response = self.client.get("/api/festivals/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
