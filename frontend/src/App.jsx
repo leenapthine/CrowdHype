@@ -5,6 +5,8 @@ import ProtectedRoute from "~/components/ProtectedRoute";
 import UserProfile from "~/routes/userProfile";
 import SavedVideos from "~/routes/savedVideos";
 import Dashboard from "~/routes/dashboard";
+import FestivalManage from "./routes/festivalManage";
+import FestivalEdit from "./routes/festivalEdit";
 import Details from "./routes/details";
 import Footer from "~/components/Footer";
 import SignUp from "~/routes/signup";
@@ -73,6 +75,23 @@ export default function App() {
         component={() => (
           <ProtectedRoute promoterOnly={true}>
             <Dashboard />
+          </ProtectedRoute>
+        )}
+      />
+      {/* Festival Management Routes */}
+      <Route
+        path="/dashboard/festival/:id"
+        component={() => (
+          <ProtectedRoute promoterOnly={true}>
+            <FestivalManage />
+          </ProtectedRoute>
+        )}
+      />
+      <Route
+        path="/dashboard/festival/:id/edit"
+        component={() => (
+          <ProtectedRoute promoterOnly={true}>
+            <FestivalEdit />
           </ProtectedRoute>
         )}
       />
