@@ -25,7 +25,7 @@ export default function UserProfile() {
           </div>
 
           <h1 class="text-2xl font-semibold text-center absolute left-1/2 transform -translate-x-1/2">
-            Saved Videos
+            User Profile
           </h1>        
         </div>
       </header>
