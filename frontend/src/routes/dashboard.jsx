@@ -1,7 +1,27 @@
+import { createSignal, createEffect, For } from "solid-js";
 import { useNavigate } from "@solidjs/router";
+import AddFestival from "~/components/AddFestival";
+
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [festivals, setFestivals] = createSignal([]);
+  const [showAddFestival, setShowAddFestival] = createSignal(false);
+
+  // Fetch festivals on component mount
+  createEffect(() => {
+    fetch("http://127.0.0.1:8000/api/festivals/", {
+      headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
+    })
+      .then((res) => res.json())
+      .then(setFestivals)
+      .catch(console.error);
+  });
+
+  // Function to update festivals when a new one is added
+  const handleFestivalAdded = (newFestival) => {
+    setFestivals([...festivals(), newFestival]);
+  };
 
   return (
     <div class="min-h-screen bg-gray-50 flex flex-col items-center">
@@ -26,24 +46,22 @@ export default function Dashboard() {
       <div class="w-full max-w-lg p-6">
         <h2 class="text-xl font-semibold mb-4">Festival Cards</h2>
         <div class="grid grid-cols-3 gap-4">
-          {/* Example festival cards */}
-          <div 
-            class="bg-gray-300 w-24 h-24 rounded flex items-center justify-center cursor-pointer"
-            onClick={() => navigate("/dashboard/festival/1")}
-          >
-            <img src="/shamb.png" alt="Shambhala Festival" class="w-full h-full object-cover rounded" />
-          </div>
-          <div 
-            class="bg-gray-300 w-24 h-24 rounded flex items-center justify-center cursor-pointer"
-            onClick={() => navigate("/dashboard/festival/2")}  
-          >
-            <img src="/lib.jpg" alt="Lib Festival" class="w-full h-full object-cover rounded" />
-          </div>
+          {/* Dynamically Render Festivals */}
+          <For each={festivals()}>
+            {(festival) => (
+              <div
+                class="bg-gray-300 w-24 h-24 rounded flex items-center justify-center cursor-pointer"
+                onClick={() => navigate(`/dashboard/festival/${festival.id}`)}
+              >
+                <img src={festival.image || "/placeholder.jpg"} alt={festival.name} class="w-full h-full object-cover rounded" />
+              </div>
+            )}
+          </For>
 
           {/* Add Festival Button */}
           <div
             class="bg-gray-200 w-24 h-24 rounded flex items-center justify-center text-3xl font-bold cursor-pointer hover:bg-gray-300"
-            onClick={() => console.log("Add Festival Clicked")}
+            onClick={() => setShowAddFestival(true)}
           >
             +
           </div>
@@ -62,6 +80,10 @@ export default function Dashboard() {
           Analytics
         </button>
       </div>
+      {/* Add Festival Popup */}
+      {showAddFestival() && (
+        <AddFestival onClose={() => setShowAddFestival(false)} onFestivalAdded={handleFestivalAdded} />
+      )}
     </div>
   );
 }
