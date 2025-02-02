@@ -27,10 +27,16 @@ export default function Dashboard() {
         <h2 class="text-xl font-semibold mb-4">Festival Cards</h2>
         <div class="grid grid-cols-3 gap-4">
           {/* Example festival cards */}
-          <div class="bg-gray-300 w-24 h-24 rounded flex items-center justify-center cursor-pointer">
+          <div 
+            class="bg-gray-300 w-24 h-24 rounded flex items-center justify-center cursor-pointer"
+            onClick={() => navigate("/dashboard/festival/1")}
+          >
             <img src="/shamb.png" alt="Shambhala Festival" class="w-full h-full object-cover rounded" />
           </div>
-          <div class="bg-gray-300 w-24 h-24 rounded flex items-center justify-center cursor-pointer">
+          <div 
+            class="bg-gray-300 w-24 h-24 rounded flex items-center justify-center cursor-pointer"
+            onClick={() => navigate("/dashboard/festival/2")}  
+          >
             <img src="/lib.jpg" alt="Lib Festival" class="w-full h-full object-cover rounded" />
           </div>
 

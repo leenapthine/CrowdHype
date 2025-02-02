@@ -10,10 +10,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
     Custom token serializer to include user role
     """
+    # pylint: disable=abstract-method
     def validate(self, attrs):
         data = super().validate(attrs)
         data["role"] = self.user.role
         return data
+    # pylint: enable=abstract-method
 
 class UserSerializer(serializers.ModelSerializer):
     """
