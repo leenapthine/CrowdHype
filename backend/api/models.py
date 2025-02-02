@@ -62,6 +62,7 @@ class Festival(models.Model):
     end_date = models.DateField()
     location = models.CharField(max_length=255, blank=True)
     image = models.ImageField(upload_to='festivals/', blank=True, null=True)
+    is_public = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.name)

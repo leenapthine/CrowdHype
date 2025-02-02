@@ -133,6 +133,19 @@ class FestivalViewSet(viewsets.ModelViewSet):
     queryset = Festival.objects.all()
     serializer_class = FestivalSerializer
 
+    @action(detail=True, methods=['patch'])
+    def toggle_privacy(self, request, pk=None):
+        festival = self.get_object()
+        festival.is_public = not festival.is_public
+        festival.save()
+        return Response({"is_public": festival.is_public})
+
+    @action(detail=True, methods=['delete'])
+    def delete_festival(self, request, pk=None):
+        festival = self.get_object()
+        festival.delete()
+        return Response({"message": "Festival deleted"}, status=status.HTTP_204_NO_CONTENT)
+
 class LikeViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
