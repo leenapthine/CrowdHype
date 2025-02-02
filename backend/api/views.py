@@ -2,7 +2,10 @@
 """
 This file contains the views for the API.
 """
+import os
+
 # Django Imports
+from django.conf import settings
 from django.contrib.auth import authenticate
 
 # Third-Party Imports (DRF, SimpleJWT)
@@ -139,6 +142,12 @@ class ArtistViewSet(viewsets.ModelViewSet):
 class FestivalViewSet(viewsets.ModelViewSet):
     queryset = Festival.objects.all()
     serializer_class = FestivalSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        """ Set the user as the creator of the festival
+        """
+        serializer.save()
 
     @action(detail=True, methods=['patch'])
     def toggle_privacy(self, _request, _pk=None):
@@ -150,12 +159,21 @@ class FestivalViewSet(viewsets.ModelViewSet):
         return Response({"is_public": festival.is_public})
 
     @action(detail=True, methods=['delete'])
-    def delete_festival(self, _request, _pk=None):
+    # pylint: disable=unused-argument
+    def delete_festival(self, request, pk=None):
         """ Delete a festival
         """
         festival = self.get_object()
+
+        # Check if festival has an image and delete it from filesystem
+        if festival.image:
+            image_path = os.path.join(settings.MEDIA_ROOT, str(festival.image))
+            if os.path.exists(image_path):
+                os.remove(image_path)
+
         festival.delete()
         return Response({"message": "Festival deleted"}, status=status.HTTP_204_NO_CONTENT)
+    # pylint: enable=unused-argument
 
 class LikeViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all()
