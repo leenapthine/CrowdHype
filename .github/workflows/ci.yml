@@ -15,11 +15,9 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          # POSTGRES_USER: lee
-          # POSTGRES_PASSWORD: supersecretpassword
-          # POSTGRES_DB: crowdhype_db
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          POSTGRES_USER: lee
+          POSTGRES_PASSWORD: supersecretpassword
+          POSTGRES_DB: crowdhype_db
         ports:
           - 5432:5432
     steps:
@@ -48,6 +46,7 @@ jobs:
       - name: Run Migrations
         env:
           DATABASE_URL: postgres://lee:supersecretpassword@127.0.0.1:5432/crowdhype_db
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           . venv/bin/activate
           python backend/manage.py migrate
