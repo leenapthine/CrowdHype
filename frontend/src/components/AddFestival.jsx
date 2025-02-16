@@ -1,4 +1,5 @@
 import { createSignal } from "solid-js";
+import { postData } from "~/lib/api";
 
 export default function AddFestival({ onClose, onFestivalAdded }) {
   const [name, setName] = createSignal("");
@@ -23,21 +24,9 @@ export default function AddFestival({ onClose, onFestivalAdded }) {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/festivals/", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to create festival");
-      }
-
-      const newFestival = await response.json();
-      onFestivalAdded(newFestival); // Update festival list in Dashboard
-      onClose(); // Close the popup
+      const newFestival = await postData("festivals", formData, true);
+      onFestivalAdded(newFestival);
+      onClose();
     } catch (err) {
       setError(err.message);
     }

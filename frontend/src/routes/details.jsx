@@ -1,25 +1,27 @@
 import { useNavigate, useParams } from "@solidjs/router";
 import { createSignal, onMount } from "solid-js";
+import { fetchData } from "~/lib/api";
 
 export default function Details() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [video, setVideo] = createSignal(null); // Initially null
-  const [loading, setLoading] = createSignal(true); // Initially true
+  const [video, setVideo] = createSignal(null);
+  const [loading, setLoading] = createSignal(true);
 
   onMount(async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/videos/${id}/`);
-      if (!response.ok) {
+      const data = await fetchData(`videos/${id}`);
+
+      if (!data) {
         throw new Error("Failed to fetch video details");
       }
-      const data = await response.json();
-      setVideo(() => data); // Update video
-      console.log("Video loaded:", data); // Logs the correct data
+
+      setVideo(() => data);
+      console.log("Video loaded:", data);
     } catch (error) {
       console.error("Error fetching video:", error);
     } finally {
-      setLoading(() => false); // Stop loading
+      setLoading(false);
     }
   });
 

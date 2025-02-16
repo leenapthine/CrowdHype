@@ -1,10 +1,12 @@
 import { createSignal, createEffect } from "solid-js";
+import { postData } from "~/lib/api";
 
 function UploadVideo( { preloadedVideo}) {
     // Signals to hold upload form data
     const [title, setTitle] = createSignal("");
     const [description, setDescription] = createSignal("");
     const [file, setFile] = createSignal(preloadedVideo || null);
+    let fileInputRef;
 
     // If a preloaded video file is provided, set it
     createEffect(() => {
@@ -32,24 +34,14 @@ function UploadVideo( { preloadedVideo}) {
         formData.append("video_file", file());
 
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/videos/", {
-            method: "POST",
-            body: formData,
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to upload video");
-            }
-
-            // parse new video data from response
-            const newVideo = await response.json();
+            const newVideo = await postData("videos", formData, true);
             console.log("Upload successful: ", newVideo);
 
             // Reset form fields
             setTitle("");
             setDescription("");
             setFile(null);
-            fileInputRef.value = "";
+            if (fileInputRef) fileInputRef.value = "";
         } catch (error) {
             console.error("Error uploading video: ", error);
         }

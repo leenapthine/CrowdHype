@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "@solidjs/router";
 import { createSignal, onMount } from "solid-js";
+import { fetchData, postData } from "~/lib/api";
 
 export default function FestivalEdit() {
   const navigate = useNavigate();
@@ -19,17 +20,18 @@ export default function FestivalEdit() {
   // Fetch festival details
   onMount(async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/festivals/${id}/`, {
+      const data = await fetchData(`festivals/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
 
-      if (!response.ok) throw new Error("Failed to fetch festival data");
-
-      const data = await response.json();
-      setFestival(data);
-      setIsPublic(data.is_public);
+      if (data) {
+        setFestival(data);
+        setIsPublic(data.is_public);
+      } else {
+        throw new Error("Failed to fetch festival data");
+      }
     } catch (err) {
       console.error("Error fetching festival:", err);
       setError("Failed to load festival details.");
@@ -39,24 +41,19 @@ export default function FestivalEdit() {
   // Handle saving festival updates
   const handleSave = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/festivals/${id}/`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-        body: JSON.stringify({
+      await postData(
+        `festivals/${id}`, 
+        {
           name: festival().name,
           description: festival().description,
           start_date: festival().start_date,
           end_date: festival().end_date,
           location: festival().location,
           is_public: isPublic(), // Ensure this value is correct
-        }),
-      });
+        },
+        "PATCH"
+      );
 
-      if (!response.ok) throw new Error("Failed to update festival");
-      
       alert("Festival updated successfully!");
       navigate("/dashboard"); // Redirect after saving
     } catch (err) {
@@ -70,15 +67,7 @@ export default function FestivalEdit() {
     if (!confirm("Are you sure you want to delete this festival?")) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/festivals/${id}/delete/`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
-
-      if (!response.ok) throw new Error("Failed to delete festival");
-
+      await postData(`festivals/${id}/delete`, {}, "DELETE");
       navigate("/dashboard"); // Redirect after deletion
     } catch (err) {
       console.error("Error deleting festival:", err);
