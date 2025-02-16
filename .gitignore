@@ -28,3 +28,7 @@ node_modules/
 
 # Ignore Django collected static files
 staticfiles/
+
+# frontend build artifacts
+.output/
+.vinxi/
