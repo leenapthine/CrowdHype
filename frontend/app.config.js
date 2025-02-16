@@ -17,13 +17,11 @@ export default defineConfig({
       '~': '/src',
     },
   },
-  ssr: {
-    entry: "./src/entry-server.jsx",
-  },
+  ssr: true,
   build: {
     rollupOptions: {
       input: {
-        ssr: "src/entry-server.jsx",
+        ssr: "src/entry-server.tsx", // ✅ Change this from .jsx to .tsx
       },
     },
   },
