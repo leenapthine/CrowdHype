@@ -17,14 +17,5 @@ export default defineConfig({
       '~': '/src',
     },
   },
-  ssr: {
-    entry: "./src/entry-server.jsx",
-  },
-  build: {
-    rollupOptions: {
-      input: {
-        ssr: "src/entry-server.jsx",
-      },
-    },
-  },
+  ssr: false
 });
