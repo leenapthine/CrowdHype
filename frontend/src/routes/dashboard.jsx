@@ -1,6 +1,7 @@
 import { createSignal, createEffect, For } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import AddFestival from "~/components/AddFestival";
+import { fetchData } from "~/lib/api";
 
 
 export default function Dashboard() {
@@ -9,13 +10,16 @@ export default function Dashboard() {
   const [showAddFestival, setShowAddFestival] = createSignal(false);
 
   // Fetch festivals on component mount
-  createEffect(() => {
-    fetch("http://127.0.0.1:8000/api/festivals/", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
-    })
-      .then((res) => res.json())
-      .then(setFestivals)
-      .catch(console.error);
+  createEffect(async () => {
+    try {
+      const data = await fetchData("festivals", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
+      });
+
+      if (data) setFestivals(data);
+    } catch (error) {
+      console.error("Error fetching festivals:", error);
+    }
   });
 
   // Function to update festivals when a new one is added

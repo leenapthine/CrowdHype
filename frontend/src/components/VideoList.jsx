@@ -1,23 +1,32 @@
 import { createSignal, createEffect } from "solid-js";
 import VideoItem from "./VideoItem";
+import { fetchData } from "~/lib/api";
 
 function VideoList() {
   const [videos, setVideos] = createSignal([]);
+  const [error, setError] = createSignal(null)
 
-  createEffect(() => {
-    fetch("http://127.0.0.1:8000/api/videos/")
-      .then((res) => res.json())
-      .then((data) => {
+  createEffect(async () => {
+    try {
+      const data = await fetchData("videos");
+      if (data) {
         setVideos(data);
-      })
-      .catch(console.error);
+      } else {
+        throw new Error("No videos found");
+      }
+    } catch (err) {
+      console.error("Error fetching videos:", err);
+      setError("Failed to load videos. Please try again later.");
+    }
   });
 
   return (
-    <div >
-      {videos().map((video) => (
-        <VideoItem video={video} />
-      ))}
+    <div>
+      {error() ? (
+        <p class="text-red-500 text-center">{error()}</p>
+      ) : (
+        videos().map((video) => <VideoItem video={video} />)
+      )}
     </div>
   );
 }

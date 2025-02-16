@@ -1,5 +1,6 @@
 import { createSignal } from "solid-js";
 import { useNavigate } from "@solidjs/router";
+import { postData } from "~/lib/api";
 
 function SignUp() {
   const [username, setUsername] = createSignal("");
@@ -14,33 +15,22 @@ function SignUp() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/signup/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username(),
-          email: email(),
-          password: password(),
-          role: role(),
-        }),
+      const data = await postData("signup", { 
+        username: username(),
+        email: email(),
+        password: password(),
+        role: role(),
       });
 
-    const text = await response.text();
-    console.log("Response text:", text);
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData?.username?.[0] || "Failed to sign up.");
-      }
+      if (!data) throw new Error("Failed to sign up.");
 
       setSuccess(true);
-      setTimeout(() => navigate("/login"), 1500); // Redirect to login after success
+      setTimeout(() => navigate("/login"), 1500); // Redirect after success
     } catch (err) {
       setError(err.message);
     }
   };
+
 
   return (
     <div class="flex flex-col items-center justify-center min-h-screen bg-neutral-100">
