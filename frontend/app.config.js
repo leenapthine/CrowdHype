@@ -18,4 +18,11 @@ export default defineConfig({
     },
   },
   ssr: false,
+  build: {
+    rollupOptions: {
+      input: {
+        ssr: "src/entry-server.jsx", // ✅ Ensure it's pointing to JSX
+      },
+    },
+  },
 });
