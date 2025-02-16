@@ -25,3 +25,6 @@ coverage.xml
 
 # Node.js
 node_modules/
+
+# Ignore Django collected static files
+staticfiles/
