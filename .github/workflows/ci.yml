@@ -15,9 +15,11 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: lee
-          POSTGRES_PASSWORD: supersecretpassword
-          POSTGRES_DB: crowdhype_db
+          # POSTGRES_USER: lee
+          # POSTGRES_PASSWORD: supersecretpassword
+          # POSTGRES_DB: crowdhype_db
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         ports:
           - 5432:5432
     steps:
