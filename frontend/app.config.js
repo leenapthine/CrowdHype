@@ -14,8 +14,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "~": "/src",
-      "src/app": "/src/App.jsx",
+      '~': '/src',
     },
   },
   ssr: true,
