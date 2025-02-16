@@ -31,7 +31,7 @@ DEBUG = True
 APPEND_SLASH = True
 
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
+ALLOWED_HOSTS = ["crowdhype.onrender.com", "localhost", "127.0.0.1", "testserver"]
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
