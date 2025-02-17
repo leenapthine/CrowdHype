@@ -17,19 +17,34 @@ export async function fetchData(endpoint, options = {}) {
 
 export async function postData(endpoint, data, method = "POST", isFormData = false) {
   try {
+    const url = `${API_BASE_URL}/${endpoint}/`;
+    const headers = isFormData
+      ? { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
+      : {
+          "Content-Type": "application/json",
+        };
+
+    // **Only add Authorization header if a token exists**
+    const token = localStorage.getItem("accessToken");
+    if (token && !isFormData) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
     const options = {
-      method: method,
-      headers: isFormData
-        ? { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
-        : {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
+      method,
+      headers,
       body: isFormData ? data : JSON.stringify(data),
     };
 
-    const response = await fetch(`${API_BASE_URL}/${endpoint}/`, options);
-    if (!response.ok) throw new Error("Failed to post data");
+    console.log("Sending API Request to:", url);
+    console.log("API Request Options:", options);
+
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("API Error:", errorText);
+      throw new Error(`Failed to post data: ${errorText}`);
+    }
 
     return await response.json();
   } catch (error) {
