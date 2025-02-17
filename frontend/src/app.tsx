@@ -1,6 +1,6 @@
 import { MetaProvider, Title } from "@solidjs/meta";
 import { Router, Route, Navigate } from "@solidjs/router";
-import { createSignal } from "solid-js";
+import { createSignal, createEffect } from "solid-js";
 import ProtectedRoute from "~/components/ProtectedRoute";
 import UserProfile from "~/routes/userProfile";
 import SavedVideos from "~/routes/savedVideos";
@@ -16,7 +16,15 @@ import "./index.css";
 
 export default function App() {
   const [showFooter, setShowFooter] = createSignal(true);
-  const role = localStorage.getItem("role");
+  // const role = localStorage.getItem("role");
+  const [role, setRole] = createSignal(null); // Store the role in a reactive signal
+
+  // Only access localStorage on the client
+  createEffect(() => {
+    if (typeof window !== "undefined") {
+      setRole(localStorage.getItem("role"));
+    }
+  });
 
   return (
     <Router
@@ -30,7 +38,7 @@ export default function App() {
       )}
     >      
       {/* Public routes */}
-      <Route path="/" component={() => <Navigate href={role === "promoter" ? "/dashboard" : "/home"} />} />
+      <Route path="/" component={() => <Navigate href={role() === "promoter" ? "/dashboard" : "/home"} />} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUp} />
 
