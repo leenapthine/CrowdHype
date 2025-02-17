@@ -5,6 +5,7 @@ const API_BASE_URL =
 
 export async function fetchData(endpoint, options = {}) {
   try {
+    console.log("VITE_BACKEND_URL:", import.meta.env.VITE_BACKEND_URL);
     const response = await fetch(`${API_BASE_URL}/${endpoint}/`, options);
     if (!response.ok) throw new Error(`API error: ${response.statusText}`);
     return await response.json();
