@@ -1,6 +1,7 @@
 import { createSignal, createEffect } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import Footer from "~/components/Footer";
+import { fetchData } from "~/lib/api";
 
 export default function SavedVideos() {
   const navigate = useNavigate();
@@ -10,15 +11,16 @@ export default function SavedVideos() {
   const fetchSavedVideos = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      console.error("User is not authenticated");
-      if (!token) return;
+      if (!token) {
+        console.error("User is not authenticated");
+        return;
+      }
 
-      const response = await fetch("http://127.0.0.1:8000/api/saved-videos/", {
+      const data = await fetchData("saved-videos", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (data) {
         setSavedVideos(data);
       } else {
         console.error("Failed to fetch saved videos");

@@ -1,5 +1,6 @@
 import { useNavigate } from "@solidjs/router";
 import { createSignal, createEffect, Show, For } from "solid-js";
+import { fetchData, postData } from "~/lib/api";
 
 function VideoItem(props) {
   const navigate = useNavigate(); // Initialize the navigation function
@@ -19,24 +20,21 @@ function VideoItem(props) {
       const headers = { Authorization: `Bearer ${token}` };
 
       // Fetch like state and count
-      const likeResponse = await fetch(`http://127.0.0.1:8000/api/likes/${props.video.id}/`, { headers });
-      if (likeResponse.ok) {
-        const likeData = await likeResponse.json();
+      const likeData = await fetchData(`likes/${props.video.id}`, { headers });
+      if (likeData) {
         setLiked(likeData.is_liked);
-        setLikeCount(likeData.like_count); // Assuming like_count is included in the response
+        setLikeCount(likeData.like_count);
       }
 
       // Fetch save state
-      const saveResponse = await fetch(`http://127.0.0.1:8000/api/saved-videos/is-saved/?video_id=${props.video.id}`, { headers });
-      if (saveResponse.ok) {
-        const saveData = await saveResponse.json();
+      const saveData = await fetchData(`saved-videos/is-saved/?video_id=${props.video.id}`, { headers });
+      if (saveData) {
         setSaved(saveData.is_saved);
       }
 
       // Fetch comments
-      const commentResponse = await fetch(`http://127.0.0.1:8000/api/comments/?video=${props.video.id}`);
-      if (commentResponse.ok) {
-        const commentData = await commentResponse.json();
+      const commentData = await fetchData(`comments/?video=${props.video.id}`);
+      if (commentData) {
         setComments(commentData);
       }
     } catch (error) {
@@ -50,25 +48,22 @@ function VideoItem(props) {
     }
   });
 
+  createEffect(() => {
+    if (props.video.id) {
+      fetchStates();
+    }
+  });
+
   // Handle like action
   const handleLike = async () => {
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) return console.error("User is not authenticated");
 
-      const response = await fetch("http://127.0.0.1:8000/api/likes/like-video/", {
-        method: liked() ? "DELETE" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ video: props.video.id }),
-      });
-
-      if (response.ok) {
-        setLiked(!liked());
-        setLikeCount(liked() ? likeCount() - 1 : likeCount() + 1);
-      }
+      await postData("likes/like-video", { video: props.video.id }, liked() ? "DELETE" : "POST");
+      
+      setLiked(!liked());
+      setLikeCount(liked() ? likeCount() - 1 : likeCount() + 1);
     } catch (error) {
       console.error("Error liking video:", error);
     }
@@ -78,26 +73,26 @@ function VideoItem(props) {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      if (!token) return console.error("User is not authenticated");
-
-      const response = await fetch(`http://127.0.0.1:8000/api/saved-videos/${saved() ? "unsave/" : "save/"}`, {
-        method: saved() ? "DELETE" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ video: props.video.id }),
-      });
-
-      if (response.ok) {
-        setSaved(!saved());
+      if (!token) {
+        console.error("User is not authenticated");
+        return;
       }
+  
+      if (saved()) {
+        // Unsave (DELETE request with video_id in query params)
+        await postData(`saved-videos/unsave?video_id=${props.video.id}`, {}, "DELETE");
+      } else {
+        // Save (POST request with video ID in the body)
+        await postData("saved-videos/save", { video: props.video.id });
+      }
+  
+      setSaved(!saved()); // Toggle UI state
     } catch (error) {
       console.error("Error saving video:", error);
     }
   };
 
-  // 3) Toggle the comment box on button click
+  // Toggle the comment box on button click
   const handleCommentToggle = () => {
     setShowCommentBox(!showCommentBox());
   };
@@ -109,20 +104,12 @@ function VideoItem(props) {
       const token = localStorage.getItem("accessToken");
       if (!token) return console.error("User is not authenticated");
 
-      const response = await fetch("http://127.0.0.1:8000/api/comments/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          video: props.video.id,
-          content: newComment(),
-        }),
+      const createdComment = await postData("comments", {
+        video: props.video.id,
+        content: newComment(),
       });
 
-      if (response.ok) {
-        const createdComment = await response.json();
+      if (createdComment) {
         setComments([...comments(), createdComment]);
         setNewComment("");
       }

@@ -1,5 +1,6 @@
 import { createSignal } from "solid-js";
 import { useNavigate } from "@solidjs/router";
+import { postData } from "~/lib/api";
 
 function Login() {
   const [username, setUsername] = createSignal("");
@@ -11,30 +12,20 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/token/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username(),
-          password: password(),
-        }),
+      const data = await postData("token", { 
+        username: username(), 
+        password: password() 
       });
 
-      if (!response.ok) {
-        throw new Error("Invalid credentials");
-      }
-
-      const data = await response.json();
-      if (data.access) {
+      if (data?.access) {
         localStorage.setItem("accessToken", data.access);
         localStorage.setItem("refreshToken", data.refresh);
         localStorage.setItem("role", data.role);
 
         // Redirect user based on role
         navigate(data.role === "promoter" ? "/dashboard" : "/home");
-
+      } else {
+        throw new Error("Invalid credentials");
       }
     } catch (err) {
       setError(err.message);

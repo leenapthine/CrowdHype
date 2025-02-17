@@ -2,10 +2,13 @@
     "compilerOptions": {
       "jsx": "preserve",
       "jsxImportSource": "solid-js",
+      "allowJs": true,
+      "checkJs": false,
       "paths": {
         "~/*": [
             "./src/*"
         ]
       }
     },
+    "include": ["src/**/*"]
 }

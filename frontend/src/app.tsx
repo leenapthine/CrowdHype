@@ -31,7 +31,7 @@ export default function App() {
     >      
       {/* Public routes */}
       <Route path="/" component={() => <Navigate href={role === "promoter" ? "/dashboard" : "/home"} />} />
-      <Route path="/login" component={() => Login } />
+      <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUp} />
 
       {/* Protected routes */}
