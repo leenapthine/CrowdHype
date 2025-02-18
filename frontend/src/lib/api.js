@@ -3,6 +3,31 @@ const API_BASE_URL =
     ? `${import.meta.env.VITE_BACKEND_URL}/api`
     : "http://127.0.0.1:8000/api"; // Local fallback
 
+export async function refreshToken() {
+  try {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (!refreshToken) {
+      console.error("No refresh token found.");
+      return null;
+    }
+
+    const response = await fetch(`${API_BASE_URL}/token/refresh/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh: refreshToken }),
+    });
+
+    if (!response.ok) throw new Error("Failed to refresh token");
+
+    const data = await response.json();
+    localStorage.setItem("accessToken", data.access);
+    return data.access;
+  } catch (error) {
+    console.error("Error refreshing token:", error);
+    return null;
+  }
+}
+
 export async function fetchData(endpoint, options = {}) {
   try {
     console.log("VITE_BACKEND_URL:", import.meta.env.VITE_BACKEND_URL);
@@ -18,17 +43,17 @@ export async function fetchData(endpoint, options = {}) {
 export async function postData(endpoint, data, method = "POST", isFormData = false) {
   try {
     const url = `${API_BASE_URL}/${endpoint}/`;
-    const headers = isFormData
-      ? {}
-      : {
-          "Content-Type": "application/json",
-        };
+    let token = localStorage.getItem("accessToken");
 
-    // **Only add Authorization header if a token exists AND it's not for signup**
-    const token = localStorage.getItem("accessToken");
-    if (token && !isFormData && endpoint !== "signup") {
-      headers["Authorization"] = `Bearer ${token}`;
+    if (!token) {
+      console.log("No access token, trying to refresh...");
+      token = await refreshToken();
+      if (!token) throw new Error("Authentication required.");
     }
+
+    const headers = isFormData
+      ? {} // No headers for FormData
+      : { "Content-Type": "application/json", Authorization: `Bearer ${token}` };
 
     const options = {
       method,
@@ -36,10 +61,21 @@ export async function postData(endpoint, data, method = "POST", isFormData = fal
       body: isFormData ? data : JSON.stringify(data),
     };
 
-    console.log("Sending API Request to:", url);
-    console.log("API Request Options:", options);
+    console.log(`Sending ${method} request to: ${url}`);
 
-    const response = await fetch(url, options);
+    let response = await fetch(url, options);
+
+    if (response.status === 401) {
+      console.log("Token expired, refreshing...");
+      token = await refreshToken();
+      if (!token) throw new Error("Authentication required.");
+
+      localStorage.setItem("accessToken", token);
+      headers["Authorization"] = `Bearer ${token}`;
+
+      // Retry request with new token
+      response = await fetch(url, options);
+    }
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -53,4 +89,3 @@ export async function postData(endpoint, data, method = "POST", isFormData = fal
     throw error;
   }
 }
-
