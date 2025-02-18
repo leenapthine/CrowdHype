@@ -3,6 +3,33 @@ const API_BASE_URL =
     ? `${import.meta.env.VITE_BACKEND_URL}/api`
     : "http://127.0.0.1:8000/api"; // Local fallback
 
+export async function loginUser(username, password) {
+  try {
+    const url = `${API_BASE_URL}/token/`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Login failed");
+    }
+
+    const data = await response.json();
+    console.log("Login successful, saving tokens:", data);
+
+    localStorage.setItem("accessToken", data.access);
+    localStorage.setItem("refreshToken", data.refresh);
+    localStorage.setItem("role", data.role || "user"); // Store role if available
+
+    return data;
+  } catch (error) {
+    console.error("Error logging in:", error);
+    throw error;
+  }
+}
+
 export async function refreshToken() {
   try {
     const refreshToken = localStorage.getItem("refreshToken");
