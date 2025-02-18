@@ -7,6 +7,8 @@ import os
 # Django Imports
 from django.conf import settings
 from django.contrib.auth import authenticate
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 # Third-Party Imports (DRF, SimpleJWT)
 from rest_framework import viewsets, status
@@ -139,6 +141,7 @@ class ArtistViewSet(viewsets.ModelViewSet):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
 
+@method_decorator(csrf_exempt, name="dispatch")
 class FestivalViewSet(viewsets.ModelViewSet):
     queryset = Festival.objects.all()
     serializer_class = FestivalSerializer
