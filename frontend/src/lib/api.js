@@ -21,7 +21,7 @@ export async function loginUser(username, password) {
 
     localStorage.setItem("accessToken", data.access);
     localStorage.setItem("refreshToken", data.refresh);
-    localStorage.setItem("role", data.role || "user"); // Store role if available
+    localStorage.setItem("role", data.role || "user");
 
     return data;
   } catch (error) {

@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import { useNavigate } from "@solidjs/router";
-import { postData } from "~/lib/api";
+import { loginUser } from "~/lib/api"; // Use loginUser instead of postData
 
 function SignUp() {
   const [username, setUsername] = createSignal("");
@@ -8,29 +8,44 @@ function SignUp() {
   const [password, setPassword] = createSignal("");
   const [role, setRole] = createSignal("member");
   const [error, setError] = createSignal("");
-  const [success, setSuccess] = createSignal(false);
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
 
     try {
-      const data = await postData("signup", { 
-        username: username(),
-        email: email(),
-        password: password(),
-        role: role(),
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/signup/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: username(),
+          email: email(),
+          password: password(),
+          role: role(),
+        }),
       });
 
-      if (!data) throw new Error("Failed to sign up.");
+      if (!response.ok) {
+        throw new Error("Failed to sign up.");
+      }
 
-      setSuccess(true);
-      setTimeout(() => navigate("/login"), 1500); // Redirect after success
+      // Automatically log the user in after signup
+      const loginData = await loginUser(username(), password());
+
+      if (loginData?.access) {
+        localStorage.setItem("accessToken", loginData.access);
+        localStorage.setItem("refreshToken", loginData.refresh);
+        localStorage.setItem("role", loginData.role);
+
+        // Redirect user based on role
+        navigate(loginData.role === "promoter" ? "/dashboard" : "/home");
+      } else {
+        throw new Error("Signup successful, but auto-login failed.");
+      }
     } catch (err) {
       setError(err.message);
     }
   };
-
 
   return (
     <div class="flex flex-col items-center justify-center min-h-screen bg-neutral-100">
@@ -39,12 +54,7 @@ function SignUp() {
         class="bg-white p-8 shadow-md rounded-md max-w-sm w-full"
       >
         <h1 class="text-xl font-semibold mb-4 text-center">Sign Up</h1>
-        {success() && (
-          <p class="text-green-600 text-sm text-center mb-4">Sign-Up Successful!</p>
-        )}
-        {error() && (
-          <p class="text-red-600 text-sm text-center mb-4">{error()}</p>
-        )}
+        {error() && <p class="text-red-600 text-sm text-center mb-4">{error()}</p>}
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1">Username</label>
           <input
