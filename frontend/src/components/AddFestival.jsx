@@ -24,7 +24,7 @@ export default function AddFestival({ onClose, onFestivalAdded }) {
     }
 
     try {
-      const newFestival = await postData("festivals", formData, true);
+      const newFestival = await postData("festivals", formData, "POST", true);
       onFestivalAdded(newFestival);
       onClose();
     } catch (err) {

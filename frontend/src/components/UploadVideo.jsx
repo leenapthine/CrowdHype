@@ -34,7 +34,7 @@ function UploadVideo( { preloadedVideo}) {
         formData.append("video_file", file());
 
         try {
-            const newVideo = await postData("videos", formData, true);
+            const newVideo = await postData("videos", formData, "POST", true);
             console.log("Upload successful: ", newVideo);
 
             // Reset form fields
