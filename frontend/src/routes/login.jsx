@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import { useNavigate } from "@solidjs/router";
-import { postData } from "~/lib/api";
+import { loginUser } from "~/lib/api"; // Use loginUser instead of postData
 
 function Login() {
   const [username, setUsername] = createSignal("");
@@ -12,10 +12,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const data = await postData("token", { 
-        username: username(), 
-        password: password() 
-      });
+      const data = await loginUser(username(), password()); // Call loginUser
 
       if (data?.access) {
         localStorage.setItem("accessToken", data.access);
@@ -61,9 +58,6 @@ function Login() {
             required
             class="w-full p-2 border rounded-md"
           />
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium mb-1">Role</label>
         </div>
         <button
           type="submit"
