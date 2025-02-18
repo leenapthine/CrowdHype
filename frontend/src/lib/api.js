@@ -19,14 +19,14 @@ export async function postData(endpoint, data, method = "POST", isFormData = fal
   try {
     const url = `${API_BASE_URL}/${endpoint}/`;
     const headers = isFormData
-      ? { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
+      ? {}
       : {
           "Content-Type": "application/json",
         };
 
-    // **Only add Authorization header if a token exists**
+    // **Only add Authorization header if a token exists AND it's not for signup**
     const token = localStorage.getItem("accessToken");
-    if (token && !isFormData) {
+    if (token && !isFormData && endpoint !== "signup") {
       headers["Authorization"] = `Bearer ${token}`;
     }
 
@@ -40,6 +40,7 @@ export async function postData(endpoint, data, method = "POST", isFormData = fal
     console.log("API Request Options:", options);
 
     const response = await fetch(url, options);
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error("API Error:", errorText);
@@ -52,3 +53,4 @@ export async function postData(endpoint, data, method = "POST", isFormData = fal
     throw error;
   }
 }
+
