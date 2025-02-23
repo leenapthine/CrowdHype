@@ -4,7 +4,7 @@ Serializers for the API
 """
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import Video, Artist, Festival, Like, Comment, CustomUser, SavedVideo
+from .models import Video, Artist, Festival, Comment, CustomUser, SavedVideo
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
@@ -59,11 +59,6 @@ class FestivalSerializer(serializers.ModelSerializer):
             'image',
             'is_public'
         ]
-
-class LikeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Like
-        fields = '__all__'
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:

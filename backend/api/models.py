@@ -21,6 +21,9 @@ class Video(models.Model):
     def __str__(self):
         return str(self.title)
 
+    class Meta:
+        ordering = ["-upload_date"]
+
 class SavedVideo(models.Model):
     """
     Model for saved videos
@@ -66,18 +69,6 @@ class Festival(models.Model):
 
     def __str__(self):
         return str(self.name)
-
-# pylint: disable=no-member
-class Like(models.Model):
-    """
-    Like model
-    """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='likes')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.user.username} likes {self.video.title}"
 
 class Comment(models.Model):
     """
