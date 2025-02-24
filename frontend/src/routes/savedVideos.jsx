@@ -51,7 +51,7 @@ export default function SavedVideos() {
 
           {/* Saved Videos Title */}
           <h1 class="text-2xl font-semibold text-center absolute left-1/2 transform -translate-x-1/2">
-            Saved Videos
+            Saved
           </h1>        
         </div>
       </header>

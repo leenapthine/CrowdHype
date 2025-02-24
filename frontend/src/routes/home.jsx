@@ -130,7 +130,10 @@ export default function Home({ setShowFooter }) {
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div class="bg-white rounded-lg p-6 shadow-xl max-w-lg w-full">
             <h2 class="text-lg font-semibold mb-4">Upload Your Recorded Video</h2>
-            <UploadVideo preloadedVideo={preloadedVideo()} />
+            <UploadVideo 
+              preloadedVideo={preloadedVideo()} 
+              setShowUploadVideo={setShowUploadVideo} 
+            />
             <button 
               onClick={() => {
                 setShowUploadVideo(false);

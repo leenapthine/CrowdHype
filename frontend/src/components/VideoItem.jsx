@@ -4,14 +4,12 @@ import { fetchData, postData } from "~/lib/api";
 
 function VideoItem(props) {
   const navigate = useNavigate(); // Initialize the navigation function
-  const [liked, setLiked] = createSignal(false); // Tracks if the video is liked
   const [saved, setSaved] = createSignal(false); // Tracks if the video is saved
-  const [likeCount, setLikeCount] = createSignal(0); // Tracks total likes
   const [comments, setComments] = createSignal([]); // Tracks comments
   const [showCommentBox, setShowCommentBox] = createSignal(false); // Toggles comment box
   const [newComment, setNewComment] = createSignal(""); // Tracks new comment input
 
-  // Fetch initial states for likes, saves, and comments
+  // Fetch initial states for saves, and comments
   const fetchStates = async () => {
     try {
       const token = localStorage.getItem("accessToken");
@@ -19,15 +17,8 @@ function VideoItem(props) {
 
       const headers = { Authorization: `Bearer ${token}` };
 
-      // Fetch like state and count
-      const likeData = await fetchData(`likes/${props.video.id}`, { headers });
-      if (likeData) {
-        setLiked(likeData.is_liked);
-        setLikeCount(likeData.like_count);
-      }
-
       // Fetch save state
-      const saveData = await fetchData(`saved-videos/is-saved/?video_id=${props.video.id}`, { headers });
+      const saveData = await fetchData(`saved-videos/${props.video.id}/is_saved`, { headers });
       if (saveData) {
         setSaved(saveData.is_saved);
       }
@@ -53,21 +44,6 @@ function VideoItem(props) {
       fetchStates();
     }
   });
-
-  // Handle like action
-  const handleLike = async () => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) return console.error("User is not authenticated");
-
-      await postData("likes/like-video", { video: props.video.id }, liked() ? "DELETE" : "POST");
-      
-      setLiked(!liked());
-      setLikeCount(liked() ? likeCount() - 1 : likeCount() + 1);
-    } catch (error) {
-      console.error("Error liking video:", error);
-    }
-  };
 
   // Handle save action
   const handleSave = async () => {
@@ -143,25 +119,8 @@ function VideoItem(props) {
 
       {/* CONTROLS CONTAINER (lighter tint) */}
       <div class="bg-neutral-50 shadow-inner rounded-b-xl px-4 py-3 flex flex-col items-center">
-        {/* Like & Comment Buttons */}
+        {/* Comment Button */}
         <div class="flex space-x-6 justify-center mb-3">
-          {/* Like Button */}
-          <button
-            onClick={handleLike}
-            // Transparent background, with text that goes blue if liked
-            class={
-              `flex items-center space-x-1 text-sm font-medium
-               border-none bg-transparent 
-               hover:text-blue-600 focus:outline-none focus:ring-2 
-               focus:ring-blue-300 transition-colors ` +
-              (liked() ? "text-blue-600" : "text-slate-600")
-            }
-          >
-            {/* Thumbs up emoji (👍) */}
-            <span>{liked() ? "👍" : "👍"}</span>
-            <span>Like</span>
-          </button>
-
           {/* Comment Button */}
           <button
             onClick={handleCommentToggle}

@@ -12,6 +12,7 @@ from django.utils.decorators import method_decorator
 
 # Third-Party Imports (DRF, SimpleJWT)
 from rest_framework import viewsets, status
+from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -20,12 +21,11 @@ from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 # Local Imports (Models & Serializers)
-from .models import Video, Artist, Festival, Like, Comment, SavedVideo
+from .models import Video, Artist, Festival, Comment, SavedVideo
 from .serializers import (
     VideoSerializer,
     ArtistSerializer,
     FestivalSerializer,
-    LikeSerializer,
     CommentSerializer,
     UserSerializer,
     SavedVideoSerializer,
@@ -134,7 +134,7 @@ class SavedVideoViewSet(viewsets.ModelViewSet):
         return Response({"error": "Save not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class VideoViewSet(viewsets.ModelViewSet):
-    queryset = Video.objects.all()
+    queryset = Video.objects.all().order_by("-upload_date")
     serializer_class = VideoSerializer
 
 class ArtistViewSet(viewsets.ModelViewSet):
@@ -177,10 +177,6 @@ class FestivalViewSet(viewsets.ModelViewSet):
         festival.delete()
         return Response({"message": "Festival deleted"}, status=status.HTTP_204_NO_CONTENT)
     # pylint: enable=unused-argument
-
-class LikeViewSet(viewsets.ModelViewSet):
-    queryset = Like.objects.all()
-    serializer_class = LikeSerializer
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
