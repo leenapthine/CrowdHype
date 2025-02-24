@@ -1,5 +1,7 @@
 import { defineConfig } from "@solidjs/start/config";
+import dotenv from "dotenv";
 
+dotenv.config();
 
 export default defineConfig({
   server: {
@@ -21,7 +23,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        ssr: "src/entry-server.tsx", // ✅ Change this from .jsx to .tsx
+        ssr: "src/entry-server.tsx",
       },
     },
   },

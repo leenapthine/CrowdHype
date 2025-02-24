@@ -3,8 +3,12 @@ const API_BASE_URL =
     ? `${import.meta.env.VITE_BACKEND_URL}/api`
     : "http://127.0.0.1:8000/api"; // Local fallback
 
+console.log("Using API:", API_BASE_URL); // Debug
+
+
 export async function loginUser(username, password) {
   try {
+    
     const url = `${API_BASE_URL}/token/`;
     const response = await fetch(url, {
       method: "POST",
@@ -57,7 +61,6 @@ export async function refreshToken() {
 
 export async function fetchData(endpoint, options = {}) {
   try {
-    console.log("VITE_BACKEND_URL:", import.meta.env.VITE_BACKEND_URL);
     const response = await fetch(`${API_BASE_URL}/${endpoint}/`, options);
     if (!response.ok) throw new Error(`API error: ${response.statusText}`);
     return await response.json();
