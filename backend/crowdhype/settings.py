@@ -14,14 +14,29 @@ from pathlib import Path
 import dj_database_url
 from environ import Env
 from datetime import timedelta 
+import os
 
-env = Env()
-Env.read_env()
-ENVIRONMENT = env('ENVIRONMENT', default='production')
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = Env()
+env.read_env(os.path.join(BASE_DIR, "crowdhype", ".env"))
+ENVIRONMENT = env('ENVIRONMENT', default='production')
+
+# Cloudflare R2 Configuration
+AWS_ACCESS_KEY_ID = env("R2_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("R2_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = "crowdhype-videos"
+AWS_S3_ENDPOINT_URL = "https://a29df9fc6efa87044ab737dc7167a69f.r2.cloudflarestorage.com"
+AWS_QUERYSTRING_AUTH = False  # Makes URLs publicly accessible if the bucket is public
+
+# Use Cloudflare R2 for media storage
+DEFAULT_FILE_STORAGE = env("DEFAULT_FILE_STORAGE")
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -83,6 +98,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_extensions',
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -121,19 +137,20 @@ WSGI_APPLICATION = 'crowdhype.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'crowdhype_db',
-        'USER': 'lee',
-        'PASSWORD': 'supersecretpassword',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
+POSTGRES_LOCALLY = env.bool('POSTGRES_LOCALLY', default=True)
 
-POSTGRES_LOCALLY = True
-if ENVIRONMENT == 'production' or POSTGRES_LOCALLY == True:
+if POSTGRES_LOCALLY:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'crowdhype_db',
+            'USER': 'lee',
+            'PASSWORD': 'supersecretpassword',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
+else:
     DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 
 # Password validation / login/logout / dev email backend
