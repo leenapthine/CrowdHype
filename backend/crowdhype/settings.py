@@ -17,11 +17,11 @@ from datetime import timedelta
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-PORT = env("PORT", "10000")
 
 env = Env()
 env.read_env(os.path.join(BASE_DIR, "crowdhype", ".env"))
 ENVIRONMENT = env('ENVIRONMENT', default='production')
+PORT = env("PORT", "10000")
 
 # Cloudflare R2 Configuration
 AWS_ACCESS_KEY_ID = env("R2_ACCESS_KEY_ID")
