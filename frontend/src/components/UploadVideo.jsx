@@ -35,7 +35,9 @@ function UploadVideo( { preloadedVideo, setShowUploadVideo }) {
         try {
             const newVideo = await postData("videos", formData, "POST", true);
             console.log("Upload successful: ", newVideo);
-            setShowUploadVideo(false);
+            if (setShowUploadVideo) {
+                setShowUploadVideo(false);
+            }
 
             // Reset form fields
             setTitle("");
