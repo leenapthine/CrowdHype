@@ -1,7 +1,7 @@
 import { createSignal, createEffect } from "solid-js";
 import { postData } from "~/lib/api";
 
-function UploadVideo( { preloadedVideo}) {
+function UploadVideo( { preloadedVideo, setShowUploadVideo }) {
     // Signals to hold upload form data
     const [title, setTitle] = createSignal("");
     const [description, setDescription] = createSignal("");
@@ -30,12 +30,12 @@ function UploadVideo( { preloadedVideo}) {
         const formData = new FormData();
         formData.append("title", title());
         formData.append("description", description());
-        // This field needs to match what our backend wants
         formData.append("video_file", file());
 
         try {
             const newVideo = await postData("videos", formData, "POST", true);
             console.log("Upload successful: ", newVideo);
+            setShowUploadVideo(false);
 
             // Reset form fields
             setTitle("");
