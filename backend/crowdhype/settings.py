@@ -51,7 +51,7 @@ SECRET_KEY = 'django-insecure-!0yd%egsp83f$0dvcuid)copulkykpl5x9-7s9t$gfnp-qz_#f
 # SECRET_KEY = env('SECRET_KEY')
 
 # MEDIA_URL = '/media/'
-MEDIA_URL = f"{AWS_S3_CUSTOM_DOMAIN}/"
+MEDIA_URL = 'https://pub-9facf8d7f0b64e0f85cdb56585205226.r2.dev/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # SECURITY WARNING: don't run with debug turned on in production!
