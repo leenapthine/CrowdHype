@@ -144,6 +144,8 @@ WSGI_APPLICATION = 'crowdhype.wsgi.application'
 
 POSTGRES_LOCALLY = env.bool('POSTGRES_LOCALLY', default=False)
 
+DATABASES = {}
+
 if POSTGRES_LOCALLY:
     DATABASES = {
         'default': {
