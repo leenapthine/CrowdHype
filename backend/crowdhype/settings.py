@@ -28,7 +28,7 @@ AWS_ACCESS_KEY_ID = env("R2_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env("R2_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = "crowdhype-videos"
 AWS_S3_ENDPOINT_URL = "https://a29df9fc6efa87044ab737dc7167a69f.r2.cloudflarestorage.com"
-AWS_QUERYSTRING_AUTH = False  # Makes URLs publicly accessible if the bucket is public
+AWS_QUERYSTRING_AUTH = False
 
 # Use Cloudflare R2 for media storage
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
@@ -53,10 +53,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if ENVIRONMENT == 'development':
-    DEBUG = True
-else:
-    DEBUG = False
+# if ENVIRONMENT == 'development':
+#     DEBUG = True
+# else:
+#     DEBUG = False
+DEBUG = env.bool("DEBUG", default=True)
 
 APPEND_SLASH = True
 
