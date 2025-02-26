@@ -2,9 +2,20 @@
 """
 Models for the api app
 """
+import uuid
+import os
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+
+def unique_video_filename(instance, filename):
+    """
+    Generate a unique filename to prevent overwrites.
+    """
+    ext = os.path.splitext(filename)[-1]
+    unique_name = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}{ext}"
+    return os.path.join("videos/", unique_name)
 
 class Video(models.Model):
     """
@@ -15,7 +26,7 @@ class Video(models.Model):
     uploader = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='videos', default=1
     )
-    video_file = models.FileField(upload_to='videos/')
+    video_file = models.FileField(upload_to=unique_video_filename)
     upload_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
