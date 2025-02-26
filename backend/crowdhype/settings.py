@@ -142,7 +142,7 @@ WSGI_APPLICATION = 'crowdhype.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-POSTGRES_LOCALLY = env.bool('POSTGRES_LOCALLY', default=True)
+POSTGRES_LOCALLY = env.bool('POSTGRES_LOCALLY', default=False)
 
 if POSTGRES_LOCALLY:
     DATABASES = {
