@@ -47,8 +47,7 @@ STORAGES = {
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!0yd%egsp83f$0dvcuid)copulkykpl5x9-7s9t$gfnp-qz_#f'
-# SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # MEDIA_URL = '/media/'
 MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
