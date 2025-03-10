@@ -1,46 +1,39 @@
-# CrowdHype Project
+# CrowdHype
 
-## Development and testing
+CrowdHype is a platform connecting event promoters with their audiences. It enables seamless event management, video uploads, and community interaction, all backed by a Solid.js frontend and a Django API.
 
-### Database Setup
+## Tech Stack
 
-First, install PostgreSQL on your system. You can download it from the official website or use a package manager.
+- **Frontend**: Solid.js (Vinxi)
+- **Backend**: Django + Django REST Framework
+- **Database**: PostgreSQL
+- **Storage**: Cloudflare R2 for media
+- **Auth**: JWT-based authentication (SimpleJWT)
 
-#### macOS
-
-Using Homebrew:
-
-```sh
-brew install postgresql
-brew services start postgresql
-```
-
-this creates a new database and user
-
-```sh
-psql -U lee -d crowdhype_db -W
-```
-
-Some stuff for Lee to remember:
-
--U lee logs in with the lee role.
-
--d crowdhype_db chooses the database you created.
-
--W forces a password prompt.
-
-password: supersecretpassword
-
-```sql
-CREATE DATABASE crowdhype_db;
-CREATE USER lee WITH PASSWORD 'supersecretpassword';
-ALTER ROLE lee SET client_encoding TO 'utf8';
-ALTER ROLE lee SET default_transaction_isolation TO 'read committed';
-ALTER ROLE lee SET timezone TO 'UTC';
-GRANT ALL PRIVILEGES ON DATABASE crowdhype_db TO lee;
-```
+## Setup & Development
 
 ### Setup environment
+
+#### Backend .env
+
+```sh
+DATABASE_URL=<your database>
+ENVIRONMENT=development
+SECRET_KEY=<secret key>
+POSTGRES_LOCALLY=True # if using postgres
+DEBUG=False
+R2_ACCESS_KEY_ID=<your ID>
+R2_SECRET_ACCESS_KEY=<your Key>
+# DEFAULT_FILE_STORAGE=<if you have a hosted file storage>
+```
+
+#### Frontend .env
+
+```sh
+VITE_BACKEND_URL=<localhost or url>
+```
+
+#### Make
 
 Run the provided makefile from your root directory to set up both your frontend and backend environment:
 
