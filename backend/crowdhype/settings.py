@@ -22,21 +22,21 @@ env.read_env(os.path.join(BASE_DIR, "crowdhype", ".env"))
 ENVIRONMENT = env('ENVIRONMENT', default='production')
 PORT = env.int("PORT", default=10000)
 
-# Cloudflare R2 Configuration
-AWS_ACCESS_KEY_ID = env("R2_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = env("R2_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = "crowdhype-videos"
-AWS_S3_ENDPOINT_URL = "https://a29df9fc6efa87044ab737dc7167a69f.r2.cloudflarestorage.com"
-AWS_S3_CUSTOM_DOMAIN = "pub-9facf8d7f0b64e0f85cdb56585205226.r2.dev"
-AWS_QUERYSTRING_AUTH = False
+# # Cloudflare R2 Configuration
+# AWS_ACCESS_KEY_ID = env("R2_ACCESS_KEY_ID")
+# AWS_SECRET_ACCESS_KEY = env("R2_SECRET_ACCESS_KEY")
+# AWS_STORAGE_BUCKET_NAME = "crowdhype-videos"
+# AWS_S3_ENDPOINT_URL = "https://a29df9fc6efa87044ab737dc7167a69f.r2.cloudflarestorage.com"
+# AWS_S3_CUSTOM_DOMAIN = "pub-9facf8d7f0b64e0f85cdb56585205226.r2.dev"
+# AWS_QUERYSTRING_AUTH = False
 
-# Use Cloudflare R2 for media storage
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# # Use Cloudflare R2 for media storage
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-    },
+    # "default": {
+    #     "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    # },
      "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
@@ -48,8 +48,8 @@ STORAGES = {
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 
-# MEDIA_URL = '/media/'
-MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+MEDIA_URL = '/media/'
+# MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # SECURITY WARNING: don't run with debug turned on in production!
