@@ -144,6 +144,13 @@ if POSTGRES_LOCALLY:
     DATABASES = {
         'default': env.db('DATABASE_URL')
     }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation / login/logout / dev email backend
 AUTH_USER_MODEL = 'api.CustomUser'
