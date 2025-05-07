@@ -32,3 +32,6 @@ staticfiles/
 # frontend build artifacts
 .output/
 .vinxi/
+
+# ignore media files
+media/
