@@ -25,7 +25,7 @@ export default function Details() {
     }
   });
 
-  // **Critical fix**: Skip all rendering until loading is complete
+  // Skip all rendering until loading is complete
   return (
     <div>
       {loading() ? (

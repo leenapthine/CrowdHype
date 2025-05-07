@@ -1,7 +1,7 @@
 import { Navigate } from "@solidjs/router";
 import { createSignal, onMount, Show } from "solid-js";
 
-function ProtectedRoute(props) {
+export default function ProtectedRoute(props) {
   const [isAuthenticated, setIsAuthenticated] = createSignal(false);
   const [userRole, setUserRole] = createSignal(null);
   const [isReady, setIsReady] = createSignal(false);
@@ -21,7 +21,8 @@ function ProtectedRoute(props) {
   return (
     <Show when={isReady()} fallback={null}>
       {isAuthenticated() ? (
-        // **Role-Based Protection**
+        
+        // Role-Based Protection
         props.promoterOnly && userRole() !== "promoter" ? (
           <Navigate href="/home" />
         ) : props.memberOnly && userRole() !== "member" ? (
@@ -35,5 +36,3 @@ function ProtectedRoute(props) {
     </Show>
   );
 }
-
-export default ProtectedRoute;

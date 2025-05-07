@@ -1,7 +1,7 @@
 import { createSignal, createEffect } from "solid-js";
 import { postData } from "~/lib/api";
 
-function UploadVideo( { preloadedVideo, setShowUploadVideo }) {
+export default function UploadVideo( { preloadedVideo, setShowUploadVideo }) {
     // Signals to hold upload form data
     const [title, setTitle] = createSignal("");
     const [description, setDescription] = createSignal("");
@@ -121,5 +121,3 @@ function UploadVideo( { preloadedVideo, setShowUploadVideo }) {
         </form>
     );
 }
-
-export default UploadVideo;

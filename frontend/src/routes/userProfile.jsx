@@ -18,7 +18,7 @@ export default function UserProfile() {
           {/* CrowdHYPE Branding */}
           <div
             class="text-left cursor-pointer"
-            onClick={() => navigate("/home")} // Navigate to the home page
+            onClick={() => navigate("/home")}
           >
             <h1 class="text-3xl font-bold">.crowd</h1>
             <h1 class="text-4xl font-bold">HYPE</h1>
@@ -48,7 +48,7 @@ export default function UserProfile() {
           <li class="text-blue-600 hover:underline cursor-pointer">Wishlist</li>
           <li
             class="text-blue-600 hover:underline cursor-pointer"
-            onClick={() => navigate("/saved")} // Navigate to /saved
+            onClick={() => navigate("/saved")}
           >
             Saved
           </li>

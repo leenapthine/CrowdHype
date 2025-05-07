@@ -22,7 +22,7 @@ export default function Footer() {
         onClick={() => navigate("/saved")}
         class="flex flex-col items-center text-center hover:text-red-400 transition-colors"
       >
-        <span class="text-xl">♡</span> {/* Outline heart */}
+        <span class="text-xl">♡</span>
         <span>Saved</span>
       </button>
 

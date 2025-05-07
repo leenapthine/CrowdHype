@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import { useNavigate } from "@solidjs/router";
-import { loginUser } from "~/lib/api"; // Use loginUser instead of postData
+import { loginUser } from "~/lib/api";
 
 function Login() {
   const [username, setUsername] = createSignal("");
@@ -12,7 +12,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const data = await loginUser(username(), password()); // Call loginUser
+      const data = await loginUser(username(), password());
 
       if (data?.access) {
         localStorage.setItem("accessToken", data.access);
@@ -65,7 +65,8 @@ function Login() {
         >
           Login
         </button>
-        {/* Add the Sign Up Link */}
+
+        {/* Sign Up Link */}
         <div class="mt-4 text-center">
           <p class="text-sm text-neutral-600">
             Don't have an account?{" "}
