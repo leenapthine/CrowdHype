@@ -3,6 +3,8 @@
 #
 # Run all available test suites from a single script.
 
+export PYTHONPATH=./backend
+
 # --------------------------------------------------------------------------
 #                                                            configuration
 # --------------------------------------------------------------------------
@@ -86,14 +88,14 @@ export PYTHONPATH=.:$PYTHONPATH
 # linting
 if (( linting ))
 then
-  tests/linting/intest yamllint pylint || exit 1
+  backend/tests/linting/intest yamllint pylint || exit 1
 fi
 \
 # unittests
 if (( unittests ))
 then
   echo "Running unit tests with coverage..."
-  coverage run --source='.' manage.py test || fail_to "run unit tests"
+  coverage run --source='.' backend/manage.py test || fail_to "run unit tests"
   
   echo "Generating coverage report..."
   coverage report -m || warn_couldnt "generate coverage report"

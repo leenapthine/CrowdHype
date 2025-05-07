@@ -9,12 +9,11 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from tests.unittests.base_test import TestCaseBase
-from api.models import Video, Artist, Festival, Like, Comment, CustomUser
+from api.models import Video, Artist, Festival, Comment, CustomUser
 from api.serializers import (
     VideoSerializer,
     ArtistSerializer,
     FestivalSerializer,
-    LikeSerializer,
     CommentSerializer,
 )
 
@@ -50,9 +49,6 @@ class SerializerTestCase(TestCaseBase):
             location="Sample Location",
         )
 
-        # Create a like
-        self.like = Like.objects.create(user=self.user, video=self.video)
-
         # Create a comment
         self.comment = Comment.objects.create(
             user=self.user, video=self.video, content="This is a sample comment."
@@ -76,12 +72,6 @@ class SerializerTestCase(TestCaseBase):
         self.assertEqual(serializer.data["name"], "Sample Festival")
         self.assertEqual(serializer.data["start_date"], "2025-01-01")
         self.assertEqual(serializer.data["end_date"], "2025-01-05")
-
-    def test_like_serializer(self):
-        """Test the LikeSerializer"""
-        serializer = LikeSerializer(instance=self.like)
-        self.assertEqual(serializer.data["user"], self.user.id)
-        self.assertEqual(serializer.data["video"], self.video.id)
 
     def test_comment_serializer(self):
         """Test the CommentSerializer"""

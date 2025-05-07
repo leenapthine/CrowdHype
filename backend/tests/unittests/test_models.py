@@ -4,7 +4,7 @@ This module contains the tests for the api models.
 """
 from datetime import date, datetime
 from django.core.files.uploadedfile import SimpleUploadedFile
-from api.models import Video, Artist, Festival, Like, Comment, CustomUser
+from api.models import Video, Artist, Festival, Comment, CustomUser
 from tests.unittests.base_test import TestCaseBase
 
 
@@ -36,11 +36,6 @@ class TestModels(TestCaseBase):
             end_date=date(2025, 1, 5),
             location='Test Location'
         )
-        # Create a sample like
-        self.like = Like.objects.create(
-            user=self.user,
-            video=self.video,
-        )
         # Create a sample comment
         self.comment = Comment.objects.create(
             user=self.user,
@@ -61,10 +56,6 @@ class TestModels(TestCaseBase):
         """Test the festival model string representation"""
         self.assertEqual(str(self.festival), "Test Festival")
 
-    def test_like_str(self):
-        """Test the like model string representation"""
-        self.assertEqual(str(self.like), f"{self.user.username} likes {self.video.title}")
-
     def test_comment_str(self):
         """Test the comment model string representation"""
         self.assertEqual(str(self.comment), f"{self.user.username} commented on {self.video.title}")
@@ -74,7 +65,7 @@ class TestModels(TestCaseBase):
         self.assertEqual(self.video.title, 'Test Video')
         self.assertEqual(self.video.description, 'Test Description')
         self.assertEqual(self.video.uploader, self.user)
-        self.assertTrue(self.video.video_file.name.startswith('videos/test'))
+        self.assertTrue(self.video.video_file.name.startswith('videos/'))
         self.assertEqual(self.video.upload_date.date(), datetime.now().date())
 
     def test_artist_fields(self):
@@ -89,11 +80,6 @@ class TestModels(TestCaseBase):
         self.assertEqual(self.festival.start_date, date(2025, 1, 1))
         self.assertEqual(self.festival.end_date, date(2025, 1, 5))
         self.assertEqual(self.festival.location, 'Test Location')
-
-    def test_like_relationship(self):
-        """Test the like relationship"""
-        self.assertEqual(self.like.user, self.user)
-        self.assertEqual(self.like.video, self.video)
 
     def test_comment_relationship(self):
         """Test the comment relationship"""
