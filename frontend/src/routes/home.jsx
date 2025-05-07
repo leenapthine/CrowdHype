@@ -118,7 +118,7 @@ export default function Home({ setShowFooter }) {
           <CameraPopup
             onClose={() => {
               setShowCamera(false);
-              setShowFooter(false); // Keep footer hidden until upload popup is closed
+              setShowFooter(false);
             }}
             onSave={handleSaveVideo}
           />

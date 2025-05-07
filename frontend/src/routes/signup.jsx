@@ -1,8 +1,8 @@
 import { createSignal } from "solid-js";
 import { useNavigate } from "@solidjs/router";
-import { loginUser } from "~/lib/api"; // Use loginUser instead of postData
+import { loginUser } from "~/lib/api";
 
-function SignUp() {
+export default function SignUp() {
   const [username, setUsername] = createSignal("");
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
@@ -106,5 +106,3 @@ function SignUp() {
     </div>
   );
 }
-
-export default SignUp;
