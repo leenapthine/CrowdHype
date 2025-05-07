@@ -34,9 +34,10 @@ PORT = env.int("PORT", default=10000)
 # DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 STORAGES = {
-    # "default": {
-    #     "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-    # },
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        'LOCATION': 'media/',  # Adjust this path as needed for your project
+    },
      "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
