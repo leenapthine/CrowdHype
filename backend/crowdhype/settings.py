@@ -10,11 +10,10 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-from pathlib import Path
-import dj_database_url
-from environ import Env
-from datetime import timedelta 
 import os
+from pathlib import Path
+from datetime import timedelta
+from environ import Env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -47,19 +46,14 @@ STORAGES = {
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!0yd%egsp83f$0dvcuid)copulkykpl5x9-7s9t$gfnp-qz_#f'
-# SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # MEDIA_URL = '/media/'
 MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# if ENVIRONMENT == 'development':
-#     DEBUG = True
-# else:
-#     DEBUG = False
-DEBUG = env.bool("DEBUG", default=True)
+DEBUG = ENVIRONMENT == 'development'
 
 APPEND_SLASH = True
 
@@ -146,21 +140,10 @@ WSGI_APPLICATION = 'crowdhype.wsgi.application'
 
 POSTGRES_LOCALLY = env.bool('POSTGRES_LOCALLY', default=False)
 
-DATABASES = {}
-
 if POSTGRES_LOCALLY:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'crowdhype_db',
-            'USER': 'lee',
-            'PASSWORD': 'supersecretpassword',
-            'HOST': '127.0.0.1',
-            'PORT': '5432',
-        }
+        'default': env.db('DATABASE_URL')
     }
-else:
-    DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 
 # Password validation / login/logout / dev email backend
 AUTH_USER_MODEL = 'api.CustomUser'
@@ -219,13 +202,13 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),  # Adjust token expiration
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": False,
     "ALGORITHM": "HS256",
-    "SIGNING_KEY": SECRET_KEY,  # Ensure SECRET_KEY is properly set
+    "SIGNING_KEY": SECRET_KEY,
     "VERIFYING_KEY": None,
     "AUTH_HEADER_TYPES": ("Bearer",),
     "USER_ID_FIELD": "id",
