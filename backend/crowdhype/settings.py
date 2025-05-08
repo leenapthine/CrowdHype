@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
-from environ import Env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,8 +20,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 if not SECRET_KEY:
     raise ImproperlyConfigured("SECRET_KEY environment variable not set")
 
-ENVIRONMENT = env('ENVIRONMENT', default='production')
-PORT = env.int("PORT", default=10000)
+ENVIRONMENT = os.environ.get('ENVIRONMENT', 'production')
+PORT = int(os.environ.get("PORT", "10000"))
 
 STORAGES = {
     'default': {
@@ -127,11 +126,18 @@ WSGI_APPLICATION = 'crowdhype.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-POSTGRES_LOCALLY = env.bool('POSTGRES_LOCALLY', default=False)
+POSTGRES_LOCALLY = os.environ.get('POSTGRES_LOCALLY', 'False') == 'True'
 
 if POSTGRES_LOCALLY:
     DATABASES = {
-        'default': env.db('DATABASE_URL')
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('POSTGRES_DB', 'crowdhype_db'),
+            'USER': os.environ.get('POSTGRES_USER', 'lee'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'supersecretpassword'),
+            'HOST': os.environ.get('POSTGRES_HOST', '127.0.0.1'),
+            'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+        }
     }
 else:
     DATABASES = {
