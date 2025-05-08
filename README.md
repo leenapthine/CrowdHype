@@ -4,6 +4,37 @@ CrowdHype is a platform connecting event promoters with their audiences. It enab
 
 This version of the program represents the minimum viable product of the app, which is still early in its development.
 
+## Features
+
+#### Core
+
+- JWT-based authentication using SimpleJWT
+- Infinite scroll video feed
+- Camera API access for recording/uploading videos
+- Basic search and filtering for local events and artists
+
+#### Member Access
+
+- Save, upload, and share videos
+- View and follow other users
+- Participate in events with basic incentive tracking
+
+#### Promoter Access
+- Create and manage event pages
+- View basic engagement analytics
+
+### Prototype
+
+<img width="847" alt="Screenshot 2025-05-08 at 1 52 30 PM" src="https://github.com/user-attachments/assets/01e6048d-9fcd-4b4e-95f5-373ee8449148" />
+
+### Minimum Viable Product
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/e961706a-1da8-4c5d-8206-62c9ef9e304f" width="32%"/>
+  <img src="https://github.com/user-attachments/assets/92a93737-466f-4c18-bea5-b8fec1a658ab" width="32%" />
+  <img src="https://github.com/user-attachments/assets/a6b9569f-0f52-4e85-bda8-23ff8c52f2f1" width="32%"/>
+</p>
+
 ## Tech Stack
 
 - **Frontend**: Solid.js
@@ -24,8 +55,6 @@ ENVIRONMENT=development
 SECRET_KEY=<secret key>
 POSTGRES_LOCALLY=True # if using postgres
 DEBUG=False
-R2_ACCESS_KEY_ID=<your ID>
-R2_SECRET_ACCESS_KEY=<your Key>
 # DEFAULT_FILE_STORAGE=<if you have a hosted file storage>
 ```
 
@@ -120,4 +149,4 @@ backend/tests/unittests/test_views.py            67      1    99%   30
 TOTAL                                           487     64    87%
 ```
 
-It will also run lint checks on Python and YAML files.
+'tests-all' will also run lint checks on Python and YAML files.
