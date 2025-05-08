@@ -11,6 +11,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DATABASE_URL: postgres://lee:supersecretpassword@127.0.0.1:5432/crowdhype_db
+      
     services:
       postgres:
         image: postgres:latest
