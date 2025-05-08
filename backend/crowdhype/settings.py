@@ -23,7 +23,7 @@ env_path = os.path.join(BASE_DIR, "crowdhype", ".env")
 if os.path.exists(env_path):
     env.read_env(env_path)
 
-SECRET_KEY = env('SECRET_KEY', default=os.environ.get('SECRET_KEY'))
+SECRET_KEY = os.environ.get('SECRET_KEY') or env('SECRET_KEY')
 
 ENVIRONMENT = env('ENVIRONMENT', default='production')
 PORT = env.int("PORT", default=10000)
