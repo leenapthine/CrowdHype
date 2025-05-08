@@ -17,13 +17,9 @@ from environ import Env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env = Env()
-
-env_path = os.path.join(BASE_DIR, "crowdhype", ".env")
-if os.path.exists(env_path):
-    env.read_env(env_path)
-
-SECRET_KEY = os.environ.get('SECRET_KEY') or env('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    raise ImproperlyConfigured("SECRET_KEY environment variable not set")
 
 ENVIRONMENT = env('ENVIRONMENT', default='production')
 PORT = env.int("PORT", default=10000)
