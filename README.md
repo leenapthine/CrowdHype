@@ -25,7 +25,9 @@ This version of the program represents the minimum viable product of the app, wh
 
 ### Prototype
 
-<img width="847" alt="Screenshot 2025-05-08 at 1 52 30 PM" src="https://github.com/user-attachments/assets/01e6048d-9fcd-4b4e-95f5-373ee8449148" />
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/01e6048d-9fcd-4b4e-95f5-373ee8449148" width="96%"/>
+</p>
 
 ### Minimum Viable Product
 
