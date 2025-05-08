@@ -18,7 +18,9 @@ from environ import Env
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = Env()
-env.read_env(os.path.join(BASE_DIR, "crowdhype", ".env"))
+env_path = os.path.join(BASE_DIR, "crowdhype", ".env")
+if os.path.exists(env_path):
+    env.read_env(env_path)
 ENVIRONMENT = env('ENVIRONMENT', default='production')
 PORT = env.int("PORT", default=10000)
 
