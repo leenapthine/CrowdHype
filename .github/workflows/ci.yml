@@ -47,29 +47,14 @@ jobs:
             sleep 5;
           done
 
-      - name: Debug SECRET_KEY
-        run: |
-          echo "SECRET_KEY is ${SECRET_KEY:-NOT SET}"
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-
       - name: Run Migrations
         env:
           DATABASE_URL: postgres://lee:supersecretpassword@127.0.0.1:5432/crowdhype_db
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           . venv/bin/activate
           python backend/manage.py migrate
 
       - name: Run Tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          POSTGRES_LOCALLY: "True"
-          POSTGRES_DB: crowdhype_db
-          POSTGRES_USER: lee
-          POSTGRES_PASSWORD: supersecretpassword
-          POSTGRES_HOST: 127.0.0.1
-          POSTGRES_PORT: 5432
         run: |
           . venv/bin/activate
           python backend/manage.py test
