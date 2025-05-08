@@ -2,7 +2,7 @@ import { useNavigate } from "@solidjs/router";
 import { createSignal, createEffect, Show, For } from "solid-js";
 import { fetchData, postData } from "~/lib/api";
 
-function VideoItem(props) {
+export default function VideoItem(props) {
   const navigate = useNavigate(); // Initialize the navigation function
   const [saved, setSaved] = createSignal(false); // Tracks if the video is saved
   const [comments, setComments] = createSignal([]); // Tracks comments
@@ -117,11 +117,10 @@ function VideoItem(props) {
         </div>
       </div>
 
-      {/* CONTROLS CONTAINER (lighter tint) */}
+      {/* Controls container */}
       <div class="bg-neutral-50 shadow-inner rounded-b-xl px-4 py-3 flex flex-col items-center">
         {/* Comment Button */}
         <div class="flex space-x-6 justify-center mb-3">
-          {/* Comment Button */}
           <button
             onClick={handleCommentToggle}
             class="flex items-center space-x-1 text-sm font-medium
@@ -129,7 +128,6 @@ function VideoItem(props) {
                    text-slate-600 hover:text-blue-600 focus:outline-none
                    focus:ring-2 focus:ring-blue-300 transition-colors"
           >
-            {/* Comment bubble emoji (💬) */}
             <span>💬</span>
             <span>Comment</span>
           </button>
@@ -148,7 +146,7 @@ function VideoItem(props) {
           </button>
         </div>
 
-        {/* If showCommentBox() is true, reveal the comment form + list */}
+        {/* If showCommentBox() is true, reveal the comment form */}
         <Show when={showCommentBox()}>
           <div class="w-full flex flex-col items-start space-y-3">
             {/* List existing comments */}
@@ -187,5 +185,3 @@ function VideoItem(props) {
     </div>
   );
 }
-
-export default VideoItem;

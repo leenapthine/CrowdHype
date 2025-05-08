@@ -9,7 +9,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
-def unique_video_filename(instance, filename):
+def unique_video_filename(instance, filename): # pylint: disable=unused-argument
     """
     Generate a unique filename to prevent overwrites.
     """
@@ -33,6 +33,7 @@ class Video(models.Model):
         return str(self.title)
 
     class Meta:
+        # pylint: disable=too-few-public-methods,missing-class-docstring
         ordering = ["-upload_date"]
 
 class SavedVideo(models.Model):
@@ -91,7 +92,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} commented on {self.video.title}"
+        return f"{self.user.username} commented on {self.video.title}" # pylint: disable=no-member
 
 class CustomUser(AbstractUser):
     """

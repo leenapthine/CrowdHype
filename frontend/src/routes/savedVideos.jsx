@@ -33,7 +33,7 @@ export default function SavedVideos() {
   };
 
   createEffect(() => {
-    fetchSavedVideos(); // Fetch saved videos when the component mounts
+    fetchSavedVideos();
   });
 
   return (
@@ -43,7 +43,7 @@ export default function SavedVideos() {
           {/* CrowdHYPE Branding */}
           <div
             class="text-left cursor-pointer"
-            onClick={() => navigate("/home")} // Navigate to the home page
+            onClick={() => navigate("/home")}
           >
             <h1 class="text-3xl font-bold">.crowd</h1>
             <h1 class="text-4xl font-bold">HYPE</h1>

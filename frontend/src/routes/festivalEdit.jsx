@@ -49,13 +49,13 @@ export default function FestivalEdit() {
           start_date: festival().start_date,
           end_date: festival().end_date,
           location: festival().location,
-          is_public: isPublic(), // Ensure this value is correct
+          is_public: isPublic(),
         },
         "PATCH"
       );
 
       alert("Festival updated successfully!");
-      navigate("/dashboard"); // Redirect after saving
+      navigate("/dashboard");
     } catch (err) {
       console.error("Error updating festival:", err);
       setError("Failed to update festival.");
@@ -68,7 +68,7 @@ export default function FestivalEdit() {
 
     try {
       await postData(`festivals/${id}/delete`, {}, "DELETE");
-      navigate("/dashboard"); // Redirect after deletion
+      navigate("/dashboard");
     } catch (err) {
       console.error("Error deleting festival:", err);
       setError("Failed to delete festival.");

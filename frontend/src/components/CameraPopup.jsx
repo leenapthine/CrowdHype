@@ -1,6 +1,6 @@
 import { createSignal, onCleanup } from 'solid-js';
 
-function CameraPopup({ onClose, onSave }) {
+export default function CameraPopup({ onClose, onSave }) {
     const [isRecording, setIsRecording] = createSignal(false);
     const [videoFile, setVideoFile] = createSignal(null);
     const [videoURL, setVideoURL] = createSignal(null);
@@ -139,5 +139,3 @@ function CameraPopup({ onClose, onSave }) {
         </div>
       );
     }
-    
-    export default CameraPopup;

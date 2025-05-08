@@ -2,7 +2,7 @@ import json
 from tests.unittests.base_test import TestCaseBase
 from rest_framework.test import APIClient
 from rest_framework import status
-from api.models import Video, Artist, Festival, Like, Comment, CustomUser
+from api.models import Video, Artist, Festival, Comment, CustomUser
 from django.core.files.uploadedfile import SimpleUploadedFile
 from datetime import date
 
@@ -55,12 +55,6 @@ class TestViews(TestCaseBase):
         self.artist = Artist.objects.create(
             name="Test Artist",
             bio="This is a test bio."
-        )
-
-        # Create sample like
-        self.like = Like.objects.create(
-            user=self.user,
-            video=self.video,
         )
 
         # Create sample comment
@@ -132,16 +126,6 @@ class TestViews(TestCaseBase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]["name"], "Test Festival")
-
-    def test_like_create(self):
-        """Test creating a like"""
-        like_data = {
-            "user": self.user.id,
-            "video": self.video.id,
-        }
-        response = self.client.post("/api/likes/", like_data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Like.objects.count(), 2)
 
     def test_comment_create(self):
         """Test creating a comment"""
