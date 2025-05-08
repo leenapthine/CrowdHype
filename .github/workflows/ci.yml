@@ -47,6 +47,12 @@ jobs:
             sleep 5;
           done
 
+      - name: Debug SECRET_KEY
+        run: |
+          echo "SECRET_KEY is ${SECRET_KEY:-NOT SET}"
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
       - name: Run Migrations
         env:
           DATABASE_URL: postgres://lee:supersecretpassword@127.0.0.1:5432/crowdhype_db
